@@ -45,6 +45,7 @@ class HomeController extends Controller
         foreach( $loaiSp as $loai){            
             $query = Product::where( [ 'status' => 1, 'loai_id' => $loai->id, 'is_old' => 1, 'is_hot' => 1])
                             ->where('so_luong_ton', '>', 0)
+                            ->where('het_hang', 0)
                             ->where('price', '>', 0)            
                             ->leftJoin('product_img', 'product_img.id', '=','product.thumbnail_id')            
                             ->select('product_img.image_url', 'product.*')                        
@@ -108,6 +109,7 @@ class HomeController extends Controller
         $seo['title'] =  $seo['description'] =  $seo['keywords'] = "Bảo hành";
 
         $newProductList =  Product::where('so_luong_ton', '>', 0)->where('price', '>', 0)
+                        ->where('het_hang', 0)
                         ->where('is_new', 1)                   
                         ->leftJoin('product_img', 'product_img.id', '=','product.thumbnail_id')
                         ->leftJoin('sp_thuoctinh', 'sp_thuoctinh.product_id', '=','product.id')
@@ -126,6 +128,7 @@ class HomeController extends Controller
         foreach( $loaiSp as $loai){            
             $query = Product::where( [ 'status' => 1, 'loai_id' => $loai->id, 'is_old' => 0])
                             ->where('so_luong_ton', '>', 0)
+                            ->where('het_hang', 0)
                             ->where('price', '>', 0)            
                             ->leftJoin('product_img', 'product_img.id', '=','product.thumbnail_id')
                             ->leftJoin('sp_thuoctinh', 'sp_thuoctinh.product_id', '=', 'product.id')            
@@ -184,6 +187,7 @@ class HomeController extends Controller
         foreach( $loaiSp as $loai){            
             $query = Product::where( [ 'status' => 1, 'loai_id' => $loai->id, 'is_old' => 1, 'is_hot' => 1])
                             ->where('so_luong_ton', '>', 0)
+                            ->where('het_hang', 0)
                             ->where('price', '>', 0)            
                             ->leftJoin('product_img', 'product_img.id', '=','product.thumbnail_id')            
                             ->select('product_img.image_url', 'product.*')                        
@@ -257,7 +261,8 @@ class HomeController extends Controller
         $colorArr = array_filter($colorArr);   
         $loaiDetail = (object) [];
         $query = Product::where('product.status', 1);
-        $query->where('so_luong_ton', '>', 0)->where('price', '>', 0)->where('loai_sp.status', 1)                        
+        $query->where('so_luong_ton', '>', 0)->where('price', '>', 0)->where('loai_sp.status', 1) 
+                        ->where('het_hang', 0)                       
                         ->leftJoin('product_img', 'product_img.id', '=','product.thumbnail_id')
                         ->leftJoin('sp_thuoctinh', 'sp_thuoctinh.product_id', '=','product.id')
                         ->join('loai_sp', 'loai_sp.id', '=', 'product.loai_id')

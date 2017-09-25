@@ -55,6 +55,7 @@ class OldController extends Controller
         
         $query = Product::where('loai_id', $loai_id)
             ->where('so_luong_ton', '>', 0)
+            ->where('het_hang', 0)
             ->where('price', '>', 0)       
             ->where('is_old', 1);
         if($cate_id > 0){
@@ -101,6 +102,7 @@ class OldController extends Controller
         foreach( $loaiSp as $loai){            
             $query = Product::where( [ 'status' => 1, 'loai_id' => $loai->id, 'is_old' => 1, 'is_hot' => 1])
                             ->where('so_luong_ton', '>', 0)
+                            ->where('het_hang', 0)
                             ->where('price', '>', 0)            
                             ->leftJoin('product_img', 'product_img.id', '=','product.thumbnail_id')            
                             ->select('product_img.image_url', 'product.*')                        
@@ -161,7 +163,7 @@ class OldController extends Controller
     {
         $tu_khoa = $request->keyword;       
         $loaiDetail = (object) [];
-        $productList = Product::where('product.alias', 'LIKE', '%'.$tu_khoa.'%')->where('so_luong_ton', '>', 0)->where('price', '>', 0)->where('loai_sp.status', 1)                        
+        $productList = Product::where('product.alias', 'LIKE', '%'.$tu_khoa.'%')->where('so_luong_ton', '>', 0)->where('price', '>', 0)->where('loai_sp.status', 1)->where('het_hang', 0)
                         ->leftJoin('product_img', 'product_img.id', '=','product.thumbnail_id')
                         ->leftJoin('sp_thuoctinh', 'sp_thuoctinh.product_id', '=','product.id')
                         ->join('loai_sp', 'loai_sp.id', '=', 'product.loai_id')

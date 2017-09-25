@@ -48,6 +48,7 @@ class CateController extends Controller
             
             $query = Product::where('loai_id', $loai_id)
                 ->where('so_luong_ton', '>', 0)
+                ->where('het_hang', 0)
                 ->where('price', '>', 0)       
                 ->where('is_old', 0)               
                 ->leftJoin('product_img', 'product_img.id', '=','product.thumbnail_id')
@@ -159,7 +160,7 @@ class CateController extends Controller
         $cateDetail = Cate::where(['loai_id' => $loai_id, 'slug' => $slug])->first();
         $cate_id = $cateDetail->id;
         
-        $query = Product::where('cate_id', $cateDetail->id)->where('loai_id', $loai_id)->where('so_luong_ton', '>', 0)->where('price', '>', 0)->where('is_old', 0)
+        $query = Product::where('cate_id', $cateDetail->id)->where('het_hang', 0)->where('loai_id', $loai_id)->where('so_luong_ton', '>', 0)->where('price', '>', 0)->where('is_old', 0)
                 ->leftJoin('product_img', 'product_img.id', '=','product.thumbnail_id')
                 ->leftJoin('sp_thuoctinh', 'sp_thuoctinh.product_id', '=','product.id')
                 ->select('product_img.image_url', 'product.*', 'thuoc_tinh');

@@ -91,6 +91,7 @@ class DetailController extends Controller
         $price_fm = $price - 1000000;
         $price_to = $price + 1000000;
         $query = Product::where('product.slug', '<>', '')
+                    ->where('het_hang', 0)
                     ->where('product.loai_id', $detail->loai_id)
                     ->leftJoin('product_img', 'product_img.id', '=','product.thumbnail_id')
                     ->leftJoin('sp_thuoctinh', 'sp_thuoctinh.product_id', '=', 'product.id')            

@@ -33,7 +33,8 @@ class NewsController extends Controller
         $socialImage = $cateDetail->image_url;
 
         $newProductList =  Product::where('so_luong_ton', '>', 0)->where('price', '>', 0)
-                        ->where('is_new', 1)                   
+                        ->where('is_new', 1)            
+                        ->where('het_hang', 0)       
                         ->leftJoin('product_img', 'product_img.id', '=','product.thumbnail_id')
                         ->leftJoin('sp_thuoctinh', 'sp_thuoctinh.product_id', '=','product.id')
                         ->join('loai_sp', 'loai_sp.id', '=', 'product.loai_id')
@@ -66,7 +67,8 @@ class NewsController extends Controller
             $cateDetail = ArticlesCate::find($detail->cate_id);
 
             $newProductList =  Product::where('so_luong_ton', '>', 0)->where('price', '>', 0)
-                        ->where('is_new', 1)                   
+                        ->where('is_new', 1)        
+                        ->where('het_hang', 0)           
                         ->leftJoin('product_img', 'product_img.id', '=','product.thumbnail_id')
                         ->leftJoin('sp_thuoctinh', 'sp_thuoctinh.product_id', '=','product.id')
                         ->join('loai_sp', 'loai_sp.id', '=', 'product.loai_id')
