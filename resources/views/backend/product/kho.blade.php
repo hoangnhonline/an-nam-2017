@@ -4,11 +4,11 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
   <h1>
-    Kho mới máy
+    Kho máy mới 
   </h1>
   <ol class="breadcrumb">
     <li><a href="#"><i class="fa fa-dashboard"></i> Dashboard</a></li>
-    <li><a href="{{ route( 'product.kho' ) }}">Kho mới máy</a></li>
+    <li><a href="{{ route( 'product.kho' ) }}">Kho máy mới</a></li>
     <li class="active">Danh sách</li>
   </ol>
 </section>
