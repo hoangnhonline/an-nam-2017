@@ -99,7 +99,9 @@
                     <div class="col-md-8 col-sm-8 col-xs-12 block_detail_left">
                         <div class="block_characteristics">
                             <h2>{!! $detail->name !!}</h2>
-                            {!! $detail->chi_tiet !!}
+                            @if(!empty( (array)$detailChung))
+                            {!! $detailChung->detail !!}
+                            @endif
                         </div><!-- /block_characteristics -->
                         <div class="block_show_less">
                             <a class="btn-overflow" href="javascript:void(0);">Xem chi tiết</a>
@@ -127,9 +129,7 @@
                     </div><!-- /block_detail_left -->
                     <div class="col-md-4 col-sm-4 col-xs-12 block_detail_right">                        
                         @if( $detail->loaiSp->is_hover == 1)
-                        <?php 
-                            $spThuocTinhArr = json_decode( $detail->thuocTinh->thuoc_tinh, true);
-                        ?>
+                       
                         <div class="block_tableparameter">
                             <h2>Thông số kỹ thuật</h2>
                             <div class="table-responsive">

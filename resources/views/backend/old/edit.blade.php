@@ -47,8 +47,7 @@
                   <!-- Nav tabs -->
                   <ul class="nav nav-tabs" role="tablist">
                     <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Thông tin chi tiết</a></li>                    
-                    <li role="presentation"><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">Hình ảnh</a></li>
-                    <li role="presentation"><a href="#thuoctinh" aria-controls="thuoctinh" role="tab" data-toggle="tab">Thuộc tính</a></li>                                  
+                    <li role="presentation"><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">Hình ảnh</a></li>                                                      
                   </ul>
 
                   <!-- Tab panes -->
@@ -94,6 +93,21 @@
                             @endforeach
                           </select>
                         </div>  
+                        <div class="form-group">
+                          <label for="email">Thông tin sản phẩm<span class="red-star">*</span></label>
+                          <?php 
+                          $loai_id = old('loai_id');
+                          if($loai_id > 0){
+                            $thongTinChungList = DB::table('thong_tin_chung')->where('loai_id', $loai_id)->get();
+                          }
+                          ?>
+                          <select class="form-control req select2" name="thong_tin_chung_id" id="thong_tin_chung_id" style="height:40px !important">
+                            <option value="">--Chọn--</option>
+                            @foreach( $thongTinChungList as $value )
+                            <option value="{{ $value->id }}" {{ $value->id == old('thong_tin_chung_id', $detail->thong_tin_chung_id) ? "selected" : "" }}>{{ $value->name }}</option>
+                            @endforeach
+                          </select>
+                        </div>
                         <div class="form-group" >                  
                           <label>Tên <span class="red-star">*</span></label>
                           <input type="text" class="form-control req" name="name" id="name" value="{{ old('name', $detail->name) }}">
@@ -140,12 +154,8 @@
                       <div class="form-group col-md-6 none-padding pleft-5">
                         <label>Khuyến mãi</label>
                         <textarea class="form-control" rows="4" name="khuyen_mai" id="khuyen_mai">{{ old('khuyen_mai', $detail->khuyen_mai) }}</textarea>
-                      </div>
-                       
-                      <div class="form-group">
-                        <label>Chi tiết</label>
-                        <textarea class="form-control" rows="10" name="chi_tiet" id="chi_tiet">{{ old('chi_tiet', $detail->chi_tiet) }}</textarea>
-                      </div>
+                      </div>                       
+                    
                         <div class="clearfix"></div>
                     </div><!--end thong tin co ban-->                    
                    
@@ -178,27 +188,7 @@
                         </div>
 
                      </div><!--end hinh anh-->
-                     <div role="tabpanel" class="tab-pane" id="thuoctinh">
                      
-                     @if( !empty( $thuocTinhArr ))
-                     <table class="table table-responsive table-bordered">
-                      @foreach($thuocTinhArr as $loaithuoctinh)
-                        <tr style="background-color:#CCC">
-                          <td colspan="2">{{ $loaithuoctinh['name']}}</td>
-                        </tr>
-                        @if( !empty($loaithuoctinh['child']))
-                          @foreach( $loaithuoctinh['child'] as $thuoctinh)
-                          <tr>
-                            <td width="150">{{ $thuoctinh['name']}}</td>
-                            <td><input type="text" class="form-control" name="thuoc_tinh[{{ $thuoctinh['id'] }}]" value="{{ isset($spThuocTinhArr[$thuoctinh['id']]) ?  $spThuocTinhArr[$thuoctinh['id']] : "" }}" ></td>
-                          </tr>
-                          @endforeach
-                        @endif
-                      @endforeach
-                      </table>
-                     @endif
-                     
-                     </div>
                   </div>
 
                 </div>
@@ -262,8 +252,12 @@
     background-color: #444345 !important;
   }
   .error{
-    border : 1px solid red;
+    border : 1px solid red !important;
   }
+  .select2-container--default .select2-selection--single{
+    height: 35px !important;
+  }
+
 </style>
 @stop
 @section('javascript_page')
@@ -336,18 +330,8 @@ $(document).on('keypress', '#name_search', function(e){
       $('#loai_id').change(function(){
         location.href="{{ route('old.create') }}?loai_id=" + $(this).val();
       })
-      $(".select2").select2();
+      $(".select2").select2();     
      
-      var editor = CKEDITOR.replace( 'chi_tiet',{
-          language : 'vi',
-          height: 300,
-          filebrowserBrowseUrl: "{{ URL::asset('public/admin/dist/js/kcfinder/browse.php?type=files') }}",
-          filebrowserImageBrowseUrl: "{{ URL::asset('public/admin/dist/js/kcfinder/browse.php?type=images') }}",
-          filebrowserFlashBrowseUrl: "{{ URL::asset('public/admin/dist/js/kcfinder/browse.php?type=flash') }}",
-          filebrowserUploadUrl: "{{ URL::asset('public/admin/dist/js/kcfinder/upload.php?type=files') }}",
-          filebrowserImageUploadUrl: "{{ URL::asset('public/admin/dist/js/kcfinder/upload.php?type=images') }}",
-          filebrowserFlashUploadUrl: "{{ URL::asset('public/admin/dist/js/kcfinder/upload.php?type=flash') }}"
-      });
       var editor2 = CKEDITOR.replace( 'khuyen_mai',{
           language : 'vi',
           height : 100,

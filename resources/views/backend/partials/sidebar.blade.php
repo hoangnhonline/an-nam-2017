@@ -15,7 +15,7 @@
     <!-- sidebar menu: : style can be found in sidebar.less -->
     <ul class="sidebar-menu">
       <li class="header">MAIN NAVIGATION</li>
-      <li class="treeview {{ in_array(\Request::route()->getName(), ['old.index', 'old.create', 'old.edit']) ? 'active' : '' }}">
+      <li class="treeview {{ in_array(\Request::route()->getName(), ['old.index', 'old.create', 'old.edit', 'old.kho']) ? 'active' : '' }}">
         <a href="#">
           <i class="fa fa-opencart"></i> 
           <span>Máy cũ giá rẻ</span>
@@ -25,10 +25,11 @@
         </a>
         <ul class="treeview-menu">
           <li {{ in_array(\Request::route()->getName(), ['old.index', 'old.edit']) ? "class=active" : "" }}><a href="{{ route('old.index') }}"><i class="fa fa-circle-o"></i> Danh sách</a></li>
-          <li {{ \Request::route()->getName() == "old.create" ? "class=active" : "" }}><a href="{{ route('old.create') }}"><i class="fa fa-circle-o"></i> Thêm sản phẩm</a></li>          
+          <li {{ \Request::route()->getName() == "old.create" ? "class=active" : "" }}><a href="{{ route('old.create') }}"><i class="fa fa-circle-o"></i> Thêm sản phẩm</a></li>  
+          <li {{ \Request::route()->getName() == "old.kho" ? "class=active" : "" }}><a href="{{ route('old.kho') }}"><i class="fa fa-circle-o"></i> Quản lý kho</a></li>              
         </ul>
       </li>
-      <li class="treeview {{ in_array(\Request::route()->getName(), ['product.index', 'product.create', 'product.edit', 'loai-sp.index', 'loai-sp.edit', 'loai-sp.create', 'cate.index', 'cate.edit', 'cate.create']) ? 'active' : '' }}">
+      <li class="treeview {{ in_array(\Request::route()->getName(), ['product.index', 'product.create', 'product.edit', 'loai-sp.index', 'loai-sp.edit', 'loai-sp.create', 'cate.index', 'cate.edit', 'cate.create', 'product.kho']) ? 'active' : '' }}">
         <a href="#">
           <i class="fa fa-opencart"></i> 
           <span>Sản phẩm</span>
@@ -41,6 +42,7 @@
           <li {{ \Request::route()->getName() == "product.create" ? "class=active" : "" }}><a href="{{ route('product.create') }}"><i class="fa fa-circle-o"></i> Thêm sản phẩm</a></li>
           <li {{ in_array(\Request::route()->getName(), ['loai-sp.index', 'loai-sp.edit', 'loai-sp.create']) ? "class=active" : "" }}><a href="{{ route('loai-sp.index') }}"><i class="fa fa-circle-o"></i> Danh mục cha</a></li>
           <li {{ in_array(\Request::route()->getName(), ['cate.index', 'cate.edit', 'cate.create']) ? "class=active" : "" }}><a href="{{ route('cate.index') }}"><i class="fa fa-circle-o"></i> Danh mục con</a></li>
+          <li {{ \Request::route()->getName() == "product.kho" ? "class=active" : "" }}><a href="{{ route('product.kho') }}"><i class="fa fa-circle-o"></i> Quản lý kho</a></li>    
         </ul>
       </li>
       
@@ -95,6 +97,12 @@
           <span>Newsletter</span>         
         </a>       
       </li>
+      <li {{ in_array(\Request::route()->getName(), ['thong-tin-chung.edit', 'thong-tin-chung.index', 'thong-tin-chung.create']) ? "class=active" : "" }}>
+        <a href="{{ route('thong-tin-chung.index') }}">
+          <i class="fa fa-pencil-square-o"></i> 
+          <span>Thông tin sản phẩm</span>         
+        </a>       
+      </li>      
       <li {{ in_array(\Request::route()->getName(), ['contact.edit', 'contact.index']) ? "class=active" : "" }}>
         <a href="{{ route('contact.index') }}">
           <i class="fa fa-pencil-square-o"></i> 

@@ -16,8 +16,9 @@ use App\Models\Banner;
 use App\Models\Location;
 use App\Models\TinhThanh;
 use App\Models\MetaData;
-use App\Models\Compare;
 use App\Models\HoverInfo;
+use App\Models\ThongTinChung;
+
 
 use Helper, File, Session, Auth;
 
@@ -47,13 +48,17 @@ class DetailController extends Controller
         }
         $loaiDetail = LoaiSp::find( $detail->loai_id );
         $cateDetail = Cate::find( $detail->cate_id );
-
+        $detailChung = (object) [];
         $hinhArr = ProductImg::where('product_id', $detail->id)->get()->toArray();
         // hien thuoc tinh
-        $tmp = SpThuocTinh::where('product_id', $detail->id)->select('thuoc_tinh')->first();
+        if($detail->thong_tin_chung_id > 0){
+            $detailChung = ThongTinChung::find($detail->thong_tin_chung_id);
         
-        if( $tmp ){
-            $spThuocTinhArr = json_decode( $tmp->thuoc_tinh, true);
+            if( $detailChung ){
+                $spThuocTinhArr = json_decode( $detailChung->thong_so, true);
+
+               // dd($spThuocTinhArr);
+            }
         }
         if ( $spThuocTinhArr ){
             $loaiThuocTinhArr = LoaiThuocTinh::where('loai_id', $detail->loai_id)->orderBy('display_order')->get();            
@@ -99,7 +104,7 @@ class DetailController extends Controller
                     });
                     $otherList = $query->orderBy('product.id', 'desc')->limit(6)->get();
         
-        return view('frontend.detail.index', compact('detail', 'loaiDetail', 'cateDetail', 'hinhArr', 'ttArr','thuocTinhArr', 'loaiThuocTinhArr', 'spThuocTinhArr', 'productArr', 'seo', 'socialImage', 'hoverInfo', 'otherList'));
+        return view('frontend.detail.index', compact('detail', 'loaiDetail', 'cateDetail', 'hinhArr', 'ttArr','thuocTinhArr', 'loaiThuocTinhArr', 'spThuocTinhArr', 'productArr', 'seo', 'socialImage', 'hoverInfo', 'otherList', 'detailChung'));
     }
 
     public function ajaxTab(Request $request){

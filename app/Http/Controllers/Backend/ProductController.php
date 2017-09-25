@@ -10,11 +10,9 @@ use App\Models\Product;
 use App\Models\LoaiSp;
 use App\Models\Cate;
 use App\Models\Color;
-use App\Models\LoaiThuocTinh;
-use App\Models\ThuocTinh;
-use App\Models\SpThuocTinh;
 use App\Models\ProductImg;
 use App\Models\MetaData;
+use App\Models\ThongTinChung;
 
 use Helper, File, Session, Auth, URL, Image;
 
@@ -80,6 +78,65 @@ class ProductController extends Controller
         }
 
         return view('backend.product.index', compact( 'items', 'arrSearch', 'loaiSpArr', 'cateArr'));
+    }
+    public function kho(Request $request)
+    {
+
+        $arrSearch['status'] = $status = isset($request->status) ? $request->status : 1;
+        $arrSearch['is_hot'] = $is_hot = isset($request->is_hot) ? $request->is_hot : null;
+        $arrSearch['is_sale'] = $is_sale = isset($request->is_sale) ? $request->is_sale : null;
+        $arrSearch['is_new'] = $is_new = isset($request->is_new) ? $request->is_new : null;
+        $arrSearch['het_hang'] = $het_hang = isset($request->het_hang) ? $request->het_hang : null;
+        $arrSearch['is_old'] = $is_old = 0;
+        $arrSearch['loai_id'] = $loai_id = isset($request->loai_id) ? $request->loai_id : null;
+        $arrSearch['cate_id'] = $cate_id = isset($request->cate_id) ? $request->cate_id : null;
+       
+        $arrSearch['name'] = $name = isset($request->name) && trim($request->name) != '' ? trim($request->name) : '';
+        
+        $query = Product::where('product.status', $status)->where('is_old', 0);
+        if( $het_hang ){
+            $query->where('product.het_hang', $het_hang);
+        }
+        if( $is_hot ){
+            $query->where('product.is_hot', $is_hot);
+        }
+        if( $is_new ){
+            $query->where('product.is_new', $is_new);
+        }
+       
+        if( $is_sale ){
+            $query->where('product.is_sale', $is_sale);
+        }
+        if( $loai_id ){
+            $query->where('product.loai_id', $loai_id);
+        }
+        if( $cate_id ){
+            $query->where('product.cate_id', $cate_id);
+        }        
+  
+        if( $name != ''){
+            $query->where('product.name', 'LIKE', '%'.$name.'%');          
+        }
+        $query->join('users', 'users.id', '=', 'product.created_user');
+        $query->join('loai_sp', 'loai_sp.id', '=', 'product.loai_id');
+        $query->join('cate', 'cate.id', '=', 'product.cate_id');             
+        if($is_hot){
+            $query->orderBy('product.display_order', 'asc');
+        }else{
+            $query->orderBy('product.id', 'desc');    
+        }
+        
+        $items = $query->select(['product.*','product.id as product_id', 'full_name' , 'product.created_at as time_created', 'users.full_name', 'loai_sp.name as ten_loai', 'cate.name as ten_cate'])
+        ->paginate(50);   
+
+        $loaiSpArr = LoaiSp::all();  
+        if( $loai_id ){
+            $cateArr = Cate::where('loai_id', $loai_id)->orderBy('display_order', 'desc')->get();
+        }else{
+            $cateArr = (object) [];
+        }
+
+        return view('backend.product.kho', compact( 'items', 'arrSearch', 'loaiSpArr', 'cateArr'));
     }
     public function short(Request $request)
     {
@@ -157,29 +214,17 @@ class ProductController extends Controller
     {
         $loai_id = $request->loai_id ? $request->loai_id : null;
         $cate_id = $request->cate_id ? $request->cate_id : null;
-        $cateArr = $loaiThuocTinhArr = (object) [];
-        $thuocTinhArr = [];
+        $cateArr = $thongTinChungList = (object) [];
+  
         $loaiSpArr = LoaiSp::all();
         
         if( $loai_id ){
             
             $cateArr = Cate::where('loai_id', $loai_id)->select('id', 'name')->orderBy('display_order', 'desc')->get();
-            
-            $loaiThuocTinhArr = LoaiThuocTinh::where('loai_id', $loai_id)->orderBy('display_order')->get();
-
-            if( $loaiThuocTinhArr->count() > 0){
-                foreach ($loaiThuocTinhArr as $value) {
-
-                    $thuocTinhArr[$value->id]['id'] = $value->id;
-                    $thuocTinhArr[$value->id]['name'] = $value->name;
-
-                    $thuocTinhArr[$value->id]['child'] = ThuocTinh::where('loai_thuoc_tinh_id', $value->id)->select('id', 'name')->orderBy('display_order')->get()->toArray();
-                }
-                
-            }
+            $thongTinChungList = ThongTinChung::where('loai_id', $loai_id)->get();
         }
         $colorArr = Color::orderBy('display_order')->get();        
-        return view('backend.product.create', compact('loaiSpArr', 'cateArr', 'colorArr', 'loai_id', 'thuocTinhArr', 'cate_id'));
+        return view('backend.product.create', compact('loaiSpArr', 'cateArr', 'colorArr', 'loai_id', 'cate_id', 'thongTinChungList'));
     }
 
     /**
@@ -195,12 +240,15 @@ class ProductController extends Controller
         $this->validate($request,[
             'name' => 'required',
             'slug' => 'required' ,
+            'thong_tin_chung_id' => 'required',
             'price' => 'required',
-            'so_luong_ton' => 'required'           
+            'price' => 'required',
+            'so_luong_ton' => 'required'       
         ],
         [
             'name.required' => 'Bạn chưa nhập tên sản phẩm',
-            'slug.required' => 'Bạn chưa nhập slug',            
+            'slug.required' => 'Bạn chưa nhập slug',      
+            'thong_tin_chung_id.required' => 'Bạn chưa chọn thông tin sản phẩm',
             'price.required' => 'Bạn chưa nhập giá',
             'so_luong_ton.required' => 'Bạn chưa nhập số lượng tồn'                      
         ]);
@@ -238,7 +286,7 @@ class ProductController extends Controller
 
         $product_id = $rs->id;
 
-        $this->storeThuocTinh( $product_id, $dataArr);
+        //$this->storeThuocTinh( $product_id, $dataArr);
 
         $this->storeImage( $product_id, $dataArr);
         $this->storeMeta($product_id, 0, $dataArr);
@@ -382,81 +430,51 @@ class ProductController extends Controller
     */
     public function edit($id)
     {
-        $thuocTinhArr = [];
         $hinhArr = (object) [];
         $detail = Product::find($id);
 
         $hinhArr = ProductImg::where('product_id', $id)->lists('image_url', 'id');
-        
-        $tmp = SpThuocTinh::where('product_id', $id)->select('thuoc_tinh')->first();
-
-        if( $tmp ){
-            $spThuocTinhArr = json_decode( $tmp->thuoc_tinh, true);
-        }        
+             
 
         $loaiSpArr = LoaiSp::all();
         
         $loai_id = $detail->loai_id; 
-            
+        $thongTinChungList = ThongTinChung::where('loai_id', $loai_id)->get();
         $cateArr = Cate::where('loai_id', $loai_id)->select('id', 'name')->orderBy('display_order', 'desc')->get();
         
-        $loaiThuocTinhArr = LoaiThuocTinh::where('loai_id', $loai_id)->orderBy('display_order')->get();
         $meta = (object) [];
         if ( $detail->meta_id > 0){
             $meta = MetaData::find( $detail->meta_id );
         }       
-        if( $loaiThuocTinhArr->count() > 0){
-            foreach ($loaiThuocTinhArr as $value) {
-
-                $thuocTinhArr[$value->id]['id'] = $value->id;
-                $thuocTinhArr[$value->id]['name'] = $value->name;
-
-                $thuocTinhArr[$value->id]['child'] = ThuocTinh::where('loai_thuoc_tinh_id', $value->id)->select('id', 'name')->orderBy('display_order')->get()->toArray();
-            }
-            
-        }        
+             
         $colorArr = Color::all();          
             
-        return view('backend.product.edit', compact( 'detail', 'hinhArr', 'thuocTinhArr', 'spThuocTinhArr', 'colorArr', 'loaiSpArr', 'cateArr', 'meta'));
+        return view('backend.product.edit', compact( 'detail', 'hinhArr', 'colorArr', 'loaiSpArr', 'cateArr', 'meta', 'thongTinChungList'));
     }
     public function copy($id)
     {
-        $thuocTinhArr = [];
+        
         $hinhArr = (object) [];
         $detail = Product::find($id);
 
         $hinhArr = ProductImg::where('product_id', $id)->lists('image_url', 'id');
         
-        $tmp = SpThuocTinh::where('product_id', $id)->select('thuoc_tinh')->first();
-
-        if( $tmp ){
-            $spThuocTinhArr = json_decode( $tmp->thuoc_tinh, true);
-        }        
-
+            
         $loaiSpArr = LoaiSp::all();
         
         $loai_id = $detail->loai_id; 
             
         $cateArr = Cate::where('loai_id', $loai_id)->select('id', 'name')->orderBy('display_order', 'desc')->get();
         
-        $loaiThuocTinhArr = LoaiThuocTinh::where('loai_id', $loai_id)->orderBy('display_order')->get();
+       
         $meta = (object) [];
         if ( $detail->meta_id > 0){
             $meta = MetaData::find( $detail->meta_id );
         }       
-        if( $loaiThuocTinhArr->count() > 0){
-            foreach ($loaiThuocTinhArr as $value) {
-
-                $thuocTinhArr[$value->id]['id'] = $value->id;
-                $thuocTinhArr[$value->id]['name'] = $value->name;
-
-                $thuocTinhArr[$value->id]['child'] = ThuocTinh::where('loai_thuoc_tinh_id', $value->id)->select('id', 'name')->orderBy('display_order')->get()->toArray();
-            }
-            
-        }        
+        
         $colorArr = Color::all();          
             
-        return view('backend.product.copy', compact( 'detail', 'hinhArr', 'thuocTinhArr', 'spThuocTinhArr', 'colorArr', 'loaiSpArr', 'cateArr', 'meta'));
+        return view('backend.product.copy', compact( 'detail', 'hinhArr', 'colorArr', 'loaiSpArr', 'cateArr', 'meta'));
     }
     public function ajaxDetail(Request $request)
     {       
@@ -478,12 +496,14 @@ class ProductController extends Controller
         $this->validate($request,[
             'name' => 'required',
             'slug' => 'required',
+            'thong_tin_chung_id' => 'required',
             'price' => 'required',
             'so_luong_ton' => 'required'            
         ],
         [
             'name.required' => 'Bạn chưa nhập tên sản phẩm',
-            'slug.required' => 'Bạn chưa nhập slug',            
+            'slug.required' => 'Bạn chưa nhập slug',
+            'thong_tin_chung_id.required' => 'Bạn chưa chọn thông tin sản phẩm',            
             'price.required' => 'Bạn chưa nhập giá',
             'so_luong_ton.required' => 'Bạn chưa nhập số lượng tồn'                    
         ]);
@@ -514,11 +534,11 @@ class ProductController extends Controller
         
         $product_id = $dataArr['id'];
        
-        $this->storeThuocTinh( $product_id, $dataArr);
+        //$this->storeThuocTinh( $product_id, $dataArr);
 
         $this->storeMeta( $product_id, $dataArr['meta_id'], $dataArr);
         $this->storeImage( $product_id, $dataArr);
-        Session::flash('message', 'Chỉnh sửa sản phẩm thành công');
+        Session::flash('message', 'Chỉnh sửa thành công');
 
         return redirect()->route('product.edit', $product_id);
         
@@ -537,7 +557,7 @@ class ProductController extends Controller
         
         $product_id = $dataArr['id'];        
 
-        Session::flash('message', 'Chỉnh sửa sản phẩm thành công');
+        Session::flash('message', 'Chỉnh sửa thành công');
 
     }
    
@@ -553,7 +573,6 @@ class ProductController extends Controller
         $model = Product::find($id);        
         $model->delete();
         ProductImg::where('product_id', $id)->delete(); 
-        SpThuocTinh::where('product_id', $id)->delete(); 
         // redirect
         Session::flash('message', 'Xóa sản phẩm thành công');
         

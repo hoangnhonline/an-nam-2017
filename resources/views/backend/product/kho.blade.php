@@ -4,11 +4,11 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
   <h1>
-    Máy cũ giá rẻ
+    Kho mới máy
   </h1>
   <ol class="breadcrumb">
     <li><a href="#"><i class="fa fa-dashboard"></i> Dashboard</a></li>
-    <li><a href="{{ route( 'old.index' ) }}">Máy cũ giá rẻ</a></li>
+    <li><a href="{{ route( 'product.kho' ) }}">Kho mới máy</a></li>
     <li class="active">Danh sách</li>
   </ol>
 </section>
@@ -19,14 +19,13 @@
     <div class="col-md-12">
       @if(Session::has('message'))
       <p class="alert alert-info" >{{ Session::get('message') }}</p>
-      @endif
-      <a href="{{ route('old.create', ['loai_id' => $arrSearch['loai_id'], 'cate_id' => $arrSearch['cate_id']]) }}" class="btn btn-info btn-sm" style="margin-bottom:5px">Tạo mới</a>
+      @endif      
       <div class="panel panel-default">
         <div class="panel-heading">
           <h3 class="panel-title">Bộ lọc</h3>
         </div>
         <div class="panel-body">
-          <form class="form-inline" id="searchForm" role="form" method="GET" action="{{ route('old.index') }}">
+          <form class="form-inline" id="searchForm" role="form" method="GET" action="{{ route('product.kho') }}">
             <div class="form-group">
              
               <select class="form-control" name="loai_id" id="loai_id">
@@ -55,6 +54,9 @@
             <div class="form-group">
               <label><input type="checkbox" name="is_sale" value="1" {{ $arrSearch['is_sale'] == 1 ? "checked" : "" }}> SALE</label>              
             </div>
+            <div class="form-group">
+              <label><input type="checkbox" name="het_hang" value="1" {{ $arrSearch['het_hang'] == 1 ? "checked" : "" }}> Hết hàng</label>              
+            </div>
                
             <button type="submit" style="margin-top:-5px" class="btn btn-primary btn-sm">Lọc</button>
           </form>         
@@ -80,12 +82,9 @@
           <table class="table table-bordered" id="table-list-data">
             <tr>
               <th style="width: 1%">#</th>
-              @if($arrSearch['is_hot'] == 1 && $arrSearch['loai_id'] > 0 )
-              <th style="width: 1%;white-space:nowrap">Thứ tự</th>
-              @endif
-              <th width="100px">Hình ảnh</th>
-              <th style="text-align:left">Thông tin sản phẩm</th>                              
-              <th width="100px" style="text-align:center">Nổi bật</th>
+              <th style="text-align:left">Tên sản phẩm</th>
+              <th style="text-align:right">Giá</th>                              
+              <th width="100px" style="text-align:center">Hết hàng</th>
               <th width="100px" style="text-align:right">Số lượng</th>
               <th width="1%;white-space:nowrap">Thao tác</th>
             </tr>
@@ -98,22 +97,13 @@
                 ?>
               <tr id="row-{{ $item->id }}">
                 <td><span class="order">{{ $i }}</span></td>
-                @if($arrSearch['is_hot'] == 1 && $arrSearch['loai_id'] > 0 )
-                <td style="vertical-align:middle;text-align:center">
-                 <input type="text" name="display_order[]" value="{{ $item->display_order}}" class="form-control" style="width:60px">
-                    <input type="hidden" name="id[]" value="{{ $item->id }}">
-                </td>
-                @endif
-                <td>
-                  <img class="img-thumbnail lazy" width="80" data-original="{{ $item->image_url ? Helper::showImage($item->image_url) : URL::asset('public/admin/dist/img/no-image.jpg') }}" alt="{{ $item->name }}" title="{{ $item->name }}" />
-                </td>
                 <td>                  
-                  <a style="color:#333;font-weight:bold" href="{{ route( 'old.edit', [ 'id' => $item->id ]) }}">{{ $item->name }} {{ $item->name_extend }}</a> &nbsp; @if( $item->is_hot == 1 )
-                  <img class="img-thumbnail" src="{{ URL::asset('public/admin/dist/img/star.png')}}" alt="Nổi bật" title="Nổi bật" />
-                  @endif<br />
-                  <strong style="color:#337ab7;font-style:italic"> {{ $item->ten_loai }} / {{ $item->ten_cate }}</strong>
+                  <a style="color:#333;font-weight:bold" href="{{ route( 'product.edit', [ 'id' => $item->id ]) }}">{{ $item->name }} {{ $item->name_extend }}</a>
                  <p style="margin-top:10px">
-                    @if( $item->is_sale == 1)
+                    
+                  </p>                  
+                </td>
+                <td class="text-right">@if( $item->is_sale == 1)
                    <b style="color:red">                  
                     {{ number_format($item->price_sale) }}
                    </b>
@@ -124,19 +114,13 @@
                     <b style="color:red">                  
                     {{ number_format($item->price) }}
                    </b>
-                    @endif 
-                  </p>                  
-                </td>
+                    @endif </td>
                 <td style="text-align:center">
-                  <input type="checkbox" data-id="{{ $item->id }}" data-col="is_hot" data-table="product" class="change-value" value="1" {{ $item->is_hot == 1  ? "checked" : "" }}>
+                  <input type="checkbox" data-id="{{ $item->id }}" data-col="het_hang" data-table="product" class="change-value" value="1" {{ $item->het_hang == 1  ? "checked" : "" }}>
                 </td>
                 <td style="text-align:right">{{ number_format($item->so_luong_ton) }}</td>
                 <td style="white-space:nowrap; text-align:right">
-                  <a class="btn btn-default btn-sm" href="{{ route('product-detail', [$item->slug , $item->id] ) }}" target="_blank"><i class="fa fa-eye" aria-hidden="true"></i> Xem</a>                  
-                  <a href="{{ route( 'old.edit', [ 'id' => $item->id ]) }}" class="btn btn-warning btn-sm">Chỉnh sửa</a>                 
-
-                  <a onclick="return callDelete('{{ $item->name }}','{{ route( 'old.destroy', [ 'id' => $item->id ]) }}');" class="btn btn-danger btn-sm">Xóa</a>
-
+                  <a href="{{ route( 'product.edit', [ 'id' => $item->id ]) }}" class="btn btn-warning btn-sm">Chỉnh sửa</a>
                 </td>
               </tr> 
               @endforeach

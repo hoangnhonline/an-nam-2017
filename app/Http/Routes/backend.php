@@ -33,6 +33,14 @@ Route::group(['namespace' => 'Backend', 'prefix' => 'backend', 'middleware' => '
         Route::post('/update', ['as' => 'color.update', 'uses' => 'ColorController@update']);
         Route::get('{id}/destroy', ['as' => 'color.destroy', 'uses' => 'ColorController@destroy']);
     });
+    Route::group(['prefix' => 'thong-tin-chung'], function () {
+        Route::get('/', ['as' => 'thong-tin-chung.index', 'uses' => 'ThongTinChungController@index']);
+        Route::get('/create', ['as' => 'thong-tin-chung.create', 'uses' => 'ThongTinChungController@create']);
+        Route::post('/store', ['as' => 'thong-tin-chung.store', 'uses' => 'ThongTinChungController@store']);
+        Route::get('{id}/edit',   ['as' => 'thong-tin-chung.edit', 'uses' => 'ThongTinChungController@edit']);
+        Route::post('/update', ['as' => 'thong-tin-chung.update', 'uses' => 'ThongTinChungController@update']);
+        Route::get('{id}/destroy', ['as' => 'thong-tin-chung.destroy', 'uses' => 'ThongTinChungController@destroy']);
+    });
     Route::group(['prefix' => 'customernoti'], function () {
         Route::get('/', ['as' => 'customernoti.index', 'uses' => 'CustomerNotificationController@index']);
         Route::get('/create', ['as' => 'customernoti.create', 'uses' => 'CustomerNotificationController@create']);
@@ -146,6 +154,7 @@ Route::group(['namespace' => 'Backend', 'prefix' => 'backend', 'middleware' => '
     });
     Route::group(['prefix' => 'old'], function () {
         Route::get('/', ['as' => 'old.index', 'uses' => 'OldController@index']);
+        Route::get('/kho', ['as' => 'old.kho', 'uses' => 'OldController@kho']);
         Route::get('/create/', ['as' => 'old.create', 'uses' => 'OldController@create']);
         Route::post('/store', ['as' => 'old.store', 'uses' => 'OldController@store']);
         Route::get('{id}/edit',   ['as' => 'old.edit', 'uses' => 'OldController@edit']);
@@ -155,6 +164,7 @@ Route::group(['namespace' => 'Backend', 'prefix' => 'backend', 'middleware' => '
     });
     Route::group(['prefix' => 'product'], function () {
         Route::get('/', ['as' => 'product.index', 'uses' => 'ProductController@index']);
+        Route::get('/kho', ['as' => 'product.kho', 'uses' => 'ProductController@kho']);
         Route::get('/short', ['as' => 'product.short', 'uses' => 'ProductController@short']);
         Route::get('/ajax-get-detail-product', ['as' => 'ajax-get-detail-product', 'uses' => 'ProductController@ajaxDetail']);        
         Route::get('/create/', ['as' => 'product.create', 'uses' => 'ProductController@create']);        
