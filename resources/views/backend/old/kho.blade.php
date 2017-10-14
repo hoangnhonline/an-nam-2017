@@ -85,7 +85,7 @@
               <th style="text-align:left">Tên sản phẩm</th>
               <th style="text-align:right" width="300px">Giá</th>                              
               <th width="100px" style="text-align:center">Hết hàng</th>
-              <th width="200px" style="text-align:right">Số lượng</th>
+              <th width="300px" style="text-align:right">Số lượng</th>
               <th width="1%;white-space:nowrap">Thao tác</th>
             </tr>
             <tbody>
@@ -123,8 +123,15 @@
                     @endif 
                     </div>
                     <div class="div_edit" style="display:none">
-                      <div class="col-sm-9"><input type="text" class="value_change form-control" value="{{ $price }}"></div>
-                      <div class="col-sm-3"><button type="button" data-id="{{ $item->id }}" data-col="{{ $col }}" data-table="product" class="btn btn-primary btn-sm btnSaveChange"><i class="fa fa-save"></i></button></div>
+                      <div class="col-sm-8"><input type="text" class="value_change form-control" value="{{ $price }}"></div>
+                      <div class="col-sm-4">
+                        <div class="col-sm-6">
+                          <button type="button" data-id="{{ $item->id }}" data-col="{{ $col }}" data-table="product" class="btn btn-primary btn-sm btnSaveChange"><i class="fa fa-save"></i></button>
+                        </div>
+                        <div class="col-sm-6">
+                          <button type="button" class="btn btn-danger btn-sm btnCancelEdit"><i class="fa fa-remove"></i></button>
+                        </div>
+                      </div>
                     </div>
                   </td>
                 <td style="text-align:center">
@@ -133,8 +140,15 @@
                 <td style="text-align:right" class="edit_product">
                 <span class="txt_display">{{ number_format($item->so_luong_ton) }}</span>
                 <div class="div_edit" style="display:none">
-                  <div class="col-sm-9"><input type="text" class="value_change form-control" value="{{ $item->so_luong_ton }}"></div>
-                  <div class="col-sm-3"><button type="button" data-id="{{ $item->id }}" data-col="so_luong_ton" data-table="product" class="btn btn-primary btn-sm btnSaveChange"><i class="fa fa-save"></i></button></div>
+                  <div class="col-sm-8"><input type="text" class="value_change form-control" value="{{ $item->so_luong_ton }}"></div>
+                  <div class="col-sm-4">
+                    <div class="col-sm-6">
+                      <button type="button" data-id="{{ $item->id }}" data-col="so_luong_ton" data-table="product" class="btn btn-primary btn-sm btnSaveChange"><i class="fa fa-save"></i></button>
+                    </div>
+                    <div class="col-sm-6">
+                      <button type="button" class="btn btn-danger btn-sm btnCancelEdit"><i class="fa fa-remove"></i></button>
+                    </div>
+                  </div>
                 </div>
                 </td>
                 <td style="white-space:nowrap; text-align:right">
@@ -203,9 +217,12 @@ $(document).ready(function(){
       }
     });
   });
-  $('.edit_product').click(function(){
+  $('td.edit_product').click(function(){
     $(this).find('.txt_display').hide();
     $(this).find('.div_edit').show();
+  });
+  $('.btnCancelEdit').click(function(){
+    location.reload();
   });
   $('.change-value').change(function(){
     var obj = $(this);
