@@ -72,7 +72,7 @@
                     <div class="block_support">
                         <h3>Tư vấn &amp; Mua hàng - Gọi</h3>
                         <div class="support_phone">                            
-                            <a href="tel:02838888999">38.888.999</a>
+                            <a href="tel:02838888999">0904500057</a>
                         </div>
                         <div class="support_img">
                             <img src="{{ URL::asset('public/assets/images/msg_color.jpg') }}" alt="Sopport">

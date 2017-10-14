@@ -129,11 +129,11 @@
                             </select>
                         </div>
                         <div style="margin-bottom:10px;clear:both"></div>
-                        <div class="form-group col-md-6 none-padding">
+                        <div class="form-group">
                             <label>Mô tả</label>
                             <textarea class="form-control" rows="4" name="mo_ta" id="mo_ta">{{ old('mo_ta') }}</textarea>
                           </div>
-                        <div class="form-group col-md-6 none-padding pleft-5">
+                        <div class="form-group">
                           <label>Khuyến mãi</label>
                           <textarea class="form-control" rows="4" name="khuyen_mai" id="khuyen_mai">{{ old('khuyen_mai') }}</textarea>
                         </div>                        
@@ -145,10 +145,7 @@
                         <div class="form-group" style="margin-top:10px;margin-bottom:10px">  
                          
                           <div class="col-md-12" style="text-align:center">                            
-                            
-                            <input type="file" id="file-image"  style="display:none" multiple/>
-                         
-                            <button class="btn btn-primary" id="btnUploadImage" type="button"><span class="glyphicon glyphicon-upload" aria-hidden="true"></span> Upload</button>
+                            <button class="btn btn-primary btnMultiUpload" type="button"><span class="glyphicon glyphicon-upload" aria-hidden="true"></span> Upload</button>
                             <div class="clearfix"></div>
                             <div id="div-image" style="margin-top:10px"></div>
                           </div>
@@ -236,6 +233,23 @@ $(document).on('click', '.remove-image', function(){
 
 
     $(document).ready(function(){
+      $('#cate_id').change(function(){         
+        var obj = $(this);
+            $.ajax({
+              url : '{{ route('get-child') }}',
+              data : {
+                mod : 'thong_tin_chung',
+                col : 'cate_id',
+                id : obj.val()
+              },
+              type : 'POST',
+              dataType : 'html',
+              success : function(data){
+                $('#thong_tin_chung_id').html(data);  
+              }
+            });
+          
+        });
       $('#btnSave').click(function(){
         var errReq = 0;
         $('#dataForm .req').each(function(){
@@ -330,47 +344,7 @@ $(document).on('click', '.remove-image', function(){
             
           ]
       });
-      $('#btnUploadImage').click(function(){        
-        $('#file-image').click();
-      }); 
-     
-      var files = "";
-      $('#file-image').change(function(e){
-         files = e.target.files;
-         
-         if(files != ''){
-           var dataForm = new FormData();        
-          $.each(files, function(key, value) {
-             dataForm.append('file[]', value);
-          });   
-          
-          dataForm.append('date_dir', 0);
-          dataForm.append('folder', 'tmp');
-
-          $.ajax({
-            url: $('#route_upload_tmp_image_multiple').val(),
-            type: "POST",
-            async: false,      
-            data: dataForm,
-            processData: false,
-            contentType: false,
-            success: function (response) {
-                $('#div-image').append(response);
-                if( $('input.thumb:checked').length == 0){
-                  $('input.thumb').eq(0).prop('checked', true);
-                }
-            },
-            error: function(response){                             
-                var errors = response.responseJSON;
-                for (var key in errors) {
-                  
-                }
-                //$('#btnLoading').hide();
-                //$('#btnSave').show();
-            }
-          });
-        }
-      });
+      
      
 
       $('#name').change(function(){

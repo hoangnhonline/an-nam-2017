@@ -148,11 +148,11 @@
                           </select>
                       </div>
                       <div style="margin-bottom:10px;clear:both"></div>
-                      <div class="form-group col-md-6 none-padding">
+                      <div class="form-group">
                           <label>Mô tả</label>
                           <textarea class="form-control" rows="4" name="mo_ta" id="mo_ta">{{ old('mo_ta', $detail->mo_ta) }}</textarea>
                         </div>
-                      <div class="form-group col-md-6 none-padding pleft-5">
+                      <div class="form-group">
                         <label>Khuyến mãi</label>
                         <textarea class="form-control" rows="4" name="khuyen_mai" id="khuyen_mai">{{ old('khuyen_mai', $detail->khuyen_mai) }}</textarea>
                       </div>
@@ -276,6 +276,23 @@ $(document).on('keypress', '#name_search', function(e){
 });
 
     $(document).ready(function(){
+      $('#cate_id').change(function(){         
+        var obj = $(this);
+            $.ajax({
+              url : '{{ route('get-child') }}',
+              data : {
+                mod : 'thong_tin_chung',
+                col : 'cate_id',
+                id : obj.val()
+              },
+              type : 'POST',
+              dataType : 'html',
+              success : function(data){
+                $('#thong_tin_chung_id').html(data);  
+              }
+            });
+          
+        });
            $('#btnSave').click(function(){
         var errReq = 0;
         $('#dataForm .req').each(function(){

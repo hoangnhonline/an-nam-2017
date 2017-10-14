@@ -17,7 +17,7 @@
           <div class="block-news-default-item">
             <div class="block_thumb">
               <a href="{{ route('news-detail', ['slug' => $articlesList->first()->slug, 'id' => $articlesList->first()->id]) }}" title="{!! $articlesList->first()->title !!}">
-                <img class="lazy" data-original="{!! Helper::showImage($articlesList->first()->image_url) !!}" alt="{!! $articlesList->first()->title !!}">
+                <img src="{!! Helper::showImage($articlesList->first()->image_url) !!}" alt="{!! $articlesList->first()->title !!}">
               </a>
             </div>
             <a href="{{ route('news-detail', ['slug' => $articlesList->first()->slug, 'id' => $articlesList->first()->id]) }}" title="{!! $articlesList->first()->title !!}">
@@ -43,7 +43,7 @@
               @if($i == 2)
               <div class="block_thumb">
                 <a href="{{ route('news-detail', ['slug' => $articles->slug, 'id' => $articles->id]) }}" title="{!! $articles->title !!}">
-                  <img class="lazy" data-original="{!! Helper::showImage($articles->image_url) !!}" alt="{!! $articles->title !!}">
+                  <img src="{!! Helper::showImage($articles->image_url) !!}" alt="{!! $articles->title !!}">
                 </a>
               </div>
               @endif

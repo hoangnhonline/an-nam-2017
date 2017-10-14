@@ -20,7 +20,7 @@
     
     <!-- ldp-banner-full -->
     <div class="ldp-banner-full">
-        <img class="lazy" data-original="{{ Helper::showImage($detail->large_banner) }}" alt="{{ $detail->name }}">        
+        <img src="{{ Helper::showImage($detail->large_banner) }}" alt="{{ $detail->name }}">        
     </div>
     <div class="text-center">
       <h1 class="btn-thelechuongtrinh">{{ $detail->name }}</h1>

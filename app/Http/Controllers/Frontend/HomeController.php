@@ -54,9 +54,7 @@ class HomeController extends Controller
            
             $productArr[$loai->id] = $query->get();
 
-            if( $loai->home_style > 0 ){
-                $bannerArr[$loai->id] = Banner::where(['object_id' => $loai->id, 'object_type' => 1])->orderBy('display_order', 'asc')->orderBy('id', 'asc')->get();
-            }       
+          
 
            
             if(count($productArr) > 0){
@@ -70,8 +68,8 @@ class HomeController extends Controller
             }            
         
         }// foreach
-      //  dd($hoverInfo);
-        $settingArr = Settings::whereRaw('1')->lists('value', 'name');
+      
+        $settingArr = Settings::whereRaw('1')->lists('value', 'name');        
         $seo = $settingArr;
         $seo['title'] =  $seo['description'] =  $seo['keywords'] = "Máy cũ giá rẻ";
         $socialImage = $settingArr['banner'];
@@ -79,8 +77,7 @@ class HomeController extends Controller
         $articlesArr = Articles::where(['cate_id' => 1, 'is_hot' => 1])->orderBy('id', 'desc')->get();
                 
         return view('frontend.old.index', compact(
-                                'productArr', 
-                                'bannerArr', 
+                                'productArr',                                
                                 'articlesArr', 
                                 'socialImage', 
                                 'seo', 
@@ -88,6 +85,12 @@ class HomeController extends Controller
                                 'loaiThuocTinhArr', 
                                 'spThuocTinhArr',
                                 'hoverInfo'));
+    }
+    public function getChild(Request $request){
+        $module = $request->mod;
+        $id = $request->id;
+        $column = $request->col;
+        return Helper::getChild($module, $column, $id);
     }
     public function timBaoHanh(Request $request){
         $kq = 4;

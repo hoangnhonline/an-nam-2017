@@ -117,22 +117,8 @@ class BannerController extends Controller
             'slug.required' => 'Bạn chưa nhập slug',
         ]);
         */
-        $dataArr['status'] = isset($dataArr['status'])  ? 1 : 0;
-        
-        if($dataArr['image_url'] && $dataArr['image_name']){
-            
-            $tmp = explode('/', $dataArr['image_url']);
-
-            if(!is_dir('public/uploads/'.date('Y/m/d'))){
-                mkdir('public/uploads/'.date('Y/m/d'), 0777, true);
-            }
-
-            $destionation = date('Y/m/d'). '/'. end($tmp);
-            
-            File::move(config('annam.upload_path').$dataArr['image_url'], config('annam.upload_path').$destionation);
-            
-            $dataArr['image_url'] = $destionation;
-        }
+        $dataArr['status'] = isset($dataArr['status'])  ? 1 : 0;        
+       
         $dataArr['created_user'] = Auth::user()->id;
 
         $dataArr['updated_user'] = Auth::user()->id;
@@ -203,22 +189,7 @@ class BannerController extends Controller
         
         
         $dataArr['updated_user'] = Auth::user()->id;
-        $dataArr['status'] = isset($dataArr['status'])  ? 1 : 0;
-
-        if($dataArr['image_url'] && $dataArr['image_name']){
-            
-            $tmp = explode('/', $dataArr['image_url']);
-
-            if(!is_dir('public/uploads/'.date('Y/m/d'))){
-                mkdir('public/uploads/'.date('Y/m/d'), 0777, true);
-            }
-
-            $destionation = date('Y/m/d'). '/'. end($tmp);
-            
-            File::move(config('annam.upload_path').$dataArr['image_url'], config('annam.upload_path').$destionation);
-            
-            $dataArr['image_url'] = $destionation;
-        }
+        $dataArr['status'] = isset($dataArr['status'])  ? 1 : 0;       
         
         $model = Banner::find($dataArr['id']);
 

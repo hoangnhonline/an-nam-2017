@@ -72,7 +72,7 @@ class ProductController extends Controller
 
         $loaiSpArr = LoaiSp::all();  
         if( $loai_id ){
-            $cateArr = Cate::where('loai_id', $loai_id)->orderBy('display_order', 'desc')->get();
+            $cateArr = Cate::where('loai_id', $loai_id)->orderBy('display_order')->get();
         }else{
             $cateArr = (object) [];
         }
@@ -131,7 +131,7 @@ class ProductController extends Controller
 
         $loaiSpArr = LoaiSp::all();  
         if( $loai_id ){
-            $cateArr = Cate::where('loai_id', $loai_id)->orderBy('display_order', 'desc')->get();
+            $cateArr = Cate::where('loai_id', $loai_id)->orderBy('display_order')->get();
         }else{
             $cateArr = (object) [];
         }
@@ -162,7 +162,7 @@ class ProductController extends Controller
 
         $loaiSpArr = LoaiSp::all();  
         if( $loai_id ){
-            $cateArr = Cate::where('loai_id', $loai_id)->orderBy('display_order', 'desc')->get();
+            $cateArr = Cate::where('loai_id', $loai_id)->orderBy('display_order')->get();
         }else{
             $cateArr = (object) [];
         }
@@ -197,7 +197,7 @@ class ProductController extends Controller
 
         $loaiSpArr = LoaiSp::all();  
         if( $loai_id ){
-            $cateArr = Cate::where('loai_id', $loai_id)->orderBy('display_order', 'desc')->get();
+            $cateArr = Cate::where('loai_id', $loai_id)->orderBy('display_order')->get();
         }else{
             $cateArr = (object) [];
         }
@@ -220,7 +220,7 @@ class ProductController extends Controller
         
         if( $loai_id ){
             
-            $cateArr = Cate::where('loai_id', $loai_id)->select('id', 'name')->orderBy('display_order', 'desc')->get();
+            $cateArr = Cate::where('loai_id', $loai_id)->select('id', 'name')->orderBy('display_order')->get();
             $thongTinChungList = ThongTinChung::where('loai_id', $loai_id)->get();
         }
         $colorArr = Color::orderBy('display_order')->get();        
@@ -355,43 +355,32 @@ class ProductController extends Controller
             if( !empty( $dataArr['image_tmp_url'] )){
 
                 foreach ($dataArr['image_tmp_url'] as $k => $image_url) {
-
-                    if( $image_url && $dataArr['image_tmp_name'][$k] ){
-
-                        $tmp = explode('/', $image_url);
-
-                        if(!is_dir('public/uploads/'.date('Y/m/d'))){
-                            mkdir('public/uploads/'.date('Y/m/d'), 0777, true);
-                        }
-                        if(!is_dir('public/uploads/thumbs/'.date('Y/m/d'))){
-                            mkdir('public/uploads/thumbs/'.date('Y/m/d'), 0777, true);
-                        }
-
-                        $destionation = date('Y/m/d'). '/'. end($tmp);
-                        
-                        File::move(config('annam.upload_path').$image_url, config('annam.upload_path').$destionation);
+                    
+                    $origin_img = base_path().$image_url;
+                    if( $image_url ){
 
                         $imageArr['is_thumbnail'][] = $is_thumbnail = $dataArr['thumbnail_id'] == $image_url  ? 1 : 0;
 
-                        //if($is_thumbnail == 1){
-                            $img = Image::make(config('annam.upload_path').$destionation);
-                            $w_img = $img->width();
-                            $h_img = $img->height();                            
-                           // var_dump($w_img, $h_img);
-                            if($h_img >= $w_img){
-                                //die('height > hon');
-                                Image::make(config('annam.upload_path').$destionation)->resize(210, null, function ($constraint) {
-                                        $constraint->aspectRatio();
-                                })->crop(210, 210)->save(config('annam.upload_thumbs_path').$destionation);
-                            }else{                             
-                                Image::make(config('annam.upload_path').$destionation)->resize(null, 210, function ($constraint) {
-                                        $constraint->aspectRatio();
-                                })->crop(210, 210)->save(config('annam.upload_thumbs_path').$destionation);
-                            }
+                        $img = Image::make($origin_img);
+                        $w_img = $img->width();
+                        $h_img = $img->height();
 
-                        //}
+                        $tmpArrImg = explode('/', $origin_img);
+                        
+                        $new_img = config('annam.upload_thumbs_path').end($tmpArrImg);
+                       
+                        if($w_img > $h_img){
 
-                        $imageArr['name'][] = $destionation;
+                            Image::make($origin_img)->resize(210, null, function ($constraint) {
+                                    $constraint->aspectRatio();
+                            })->crop(210, 210)->save($new_img);
+                        }else{
+                            Image::make($origin_img)->resize(null, 210, function ($constraint) {
+                                    $constraint->aspectRatio();
+                            })->crop(210, 210)->save($new_img);
+                        }                           
+
+                        $imageArr['name'][] = $image_url;
                         
                     }
                 }
@@ -440,7 +429,7 @@ class ProductController extends Controller
         
         $loai_id = $detail->loai_id; 
         $thongTinChungList = ThongTinChung::where('loai_id', $loai_id)->get();
-        $cateArr = Cate::where('loai_id', $loai_id)->select('id', 'name')->orderBy('display_order', 'desc')->get();
+        $cateArr = Cate::where('loai_id', $loai_id)->select('id', 'name')->orderBy('display_order')->get();
         
         $meta = (object) [];
         if ( $detail->meta_id > 0){
@@ -464,7 +453,7 @@ class ProductController extends Controller
         
         $loai_id = $detail->loai_id; 
             
-        $cateArr = Cate::where('loai_id', $loai_id)->select('id', 'name')->orderBy('display_order', 'desc')->get();
+        $cateArr = Cate::where('loai_id', $loai_id)->select('id', 'name')->orderBy('display_order')->get();
         
        
         $meta = (object) [];

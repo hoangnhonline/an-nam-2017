@@ -38,12 +38,14 @@ class ViewComposerServiceProvider extends ServiceProvider
 	 */
 	private function composerMenu()
 	{
+
 		$cateArrByLoai = [];		
 		view()->composer( '*' , function( $view ){
 			
 			$loaiSpList = LoaiSp::where(['status' => 1])->orderBy('display_order')->get();
 
 	        if( $loaiSpList ){
+
 	            foreach ( $loaiSpList as $key => $value) {	            	          		
 	            	$cateArrByLoai[$value->id] = Cate::where(['status' => 1, 'loai_id' => $value->id])
 	                    ->orderBy('display_order')
@@ -53,6 +55,7 @@ class ViewComposerServiceProvider extends ServiceProvider
 	        }    
 	        $settingArr = Settings::whereRaw('1')->lists('value', 'name');
 	        $routeName = \Request::route()->getName();
+
 	       // var_dump("<pre>", $menuDoc);die;   
 	        //var_dump("<pre>", $loaiSpKey);die;
 	        $colorList = Color::orderBy('display_order')->get();

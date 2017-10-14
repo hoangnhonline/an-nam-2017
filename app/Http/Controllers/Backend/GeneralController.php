@@ -50,8 +50,11 @@ class GeneralController extends Controller
                 $display_order = 0;
             }
             DB::table($table)->where('id', $id)->update([$column => $value, 'display_order' => $display_order]);
+            if( $column == "het_hang" && $value == 1){
+                DB::table($table)->where('id', $id)->update(['so_luong_ton' => 0]);
+            }
         }else{
-            DB::table($table)->where('id', $id)->update([$column => $value]);       
+            DB::table($table)->where('id', $id)->update([$column => $value]);            
         }
         
         

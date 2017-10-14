@@ -31,7 +31,7 @@ $_CONFIG = array(
     // (F)CKEditor types
         'files'   =>  "",
         'flash'   =>  "swf",
-        'images'  =>  "*img",
+        'images'  =>  "*img ico",
 
     // TinyMCE types
         'file'    =>  "",
@@ -43,7 +43,7 @@ $_CONFIG = array(
 // IMAGE SETTINGS
 
     'imageDriversPriority' => "imagick gmagick gd",
-    'jpegQuality' => 90,
+    'jpegQuality' => 100,
     'thumbsDir' => ".thumbs",
 
     'maxImageWidth' => 0,

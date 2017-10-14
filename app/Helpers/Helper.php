@@ -16,21 +16,35 @@ class Helper
         return DB::table($table)->where($where)->max('display_order') + 1;
     }
     public static function showImage($image_url, $type = 'original'){
+      
+        return strpos($image_url, 'http') === false ? env('APP_URL') . $image_url : $image_url;        
 
-        //return strpos($image_url, 'http') === false ? config('annam.upload_url') . $type . '/' . $image_url : $image_url;        
-        return strpos($image_url, 'http') === false ? config('annam.upload_url') . $image_url : $image_url;        
-
+    }
+    public static function getChild($table, $column, $parent_id){
+        $listData = DB::table($table)->where($column, $parent_id)->get();
+        
+            echo '<option value="">--Chọn--</option>';
+        
+        if(!empty(  (array) $listData  )){
+            
+            foreach($listData as $data){
+                echo "<option value=".$data->id.">".$data->name."</option>";
+            }
+        }
     }
     public static function showImageThumb($image_url, $object_type = 1, $folder = ''){             
         // type = 1 : original 2 : thumbs
-        //object_type = 1 : product, 2 :article  3: project             
+        //object_type = 1 : product, 2 :article  3: project          
+        $tmpArrImg = explode('/', $image_url);
+                        
+        $image_url = config('annam.upload_url_thumbs').end($tmpArrImg);           
         if(strpos($image_url, 'http') === false){
             if($object_type == 1){
-                return config('annam.upload_url') . 'thumbs' . $folder. '/' . $image_url;
+                return env('APP_URL') . $folder. $image_url;
             }elseif($object_type == 2){
-                return config('annam.upload_url') . 'thumbs/articles/'. $folder. '/' . $image_url;
+                return env('APP_URL') . $folder. $image_url;
             }else{
-                return config('annam.upload_url') . 'thumbs/projects/'. $folder. '/' . $image_url;
+                return env('APP_URL') . $folder. $image_url;
             }    
         }else{
             return $image_url;

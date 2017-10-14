@@ -85,7 +85,7 @@
               <th style="text-align:left">Tên sản phẩm</th>
               <th style="text-align:right">Giá</th>                              
               <th width="100px" style="text-align:center">Hết hàng</th>
-              <th width="100px" style="text-align:right">Số lượng</th>
+              <th width="200px" style="text-align:right">Số lượng</th>
               <th width="1%;white-space:nowrap">Thao tác</th>
             </tr>
             <tbody>
@@ -118,7 +118,12 @@
                 <td style="text-align:center">
                   <input type="checkbox" data-id="{{ $item->id }}" data-col="het_hang" data-table="product" class="change-value" value="1" {{ $item->het_hang == 1  ? "checked" : "" }}>
                 </td>
-                <td style="text-align:right">{{ number_format($item->so_luong_ton) }}</td>
+                <td style="text-align:right" class="edit_so_luong"><span class="txt_sl">{{ number_format($item->so_luong_ton) }}</span>
+                <div class="div_edit" style="display:none">
+                  <div class="col-sm-8"><input type="text" class="so_luong_ton form-control" value="{{ $item->so_luong_ton }}"></div>
+                  <div class="col-sm-4"><button type="button" data-id="{{ $item->id }}" class="btn btn-primary btn-sm btnSaveQuantity"><i class="fa fa-save"></i></button></div>
+                </div>
+                </td>
                 <td style="white-space:nowrap; text-align:right">
                   <a href="{{ route( 'product.edit', [ 'id' => $item->id ]) }}" class="btn btn-warning btn-sm">Chỉnh sửa</a>
                 </td>
@@ -168,6 +173,27 @@ function callDelete(name, url){
   return flag;
 }
 $(document).ready(function(){
+  $('.btnSaveQuantity').click(function(){
+    var obj = $(this);
+    var so_luong_ton = obj.parents('.div_edit').find('.so_luong_ton').val();
+    $.ajax({
+      url : "{{ route('change-value') }}",
+      type :'POST',
+      data : {
+        id : obj.data('id'),
+        value : so_luong_ton,
+        column : 'so_luong_ton',
+        table : 'product'
+      },
+      success : function(data){        
+        location.reload();
+      }
+    });
+  });
+  $('.edit_so_luong').click(function(){
+    $(this).find('.txt_sl').hide();
+    $(this).find('.div_edit').show();
+  });
   $('.change-value').change(function(){
     var obj = $(this);
     var val = 0;
@@ -184,7 +210,7 @@ $(document).ready(function(){
         table : obj.data('table')
       },
       success : function(data){
-        console.log(data);
+        location.reload();
       }
     });
   });

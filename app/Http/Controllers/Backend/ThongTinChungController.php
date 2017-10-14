@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ThongTinChung;
 use App\Models\LoaiThuocTinh;
 use App\Models\ThuocTinh;
+use App\Models\Cate;
 use App\Models\MetaData;
 
 use Helper, File, Session, Auth, Image;
@@ -23,6 +24,7 @@ class ThongTinChungController extends Controller
     public function index(Request $request)
     {
         $loai_id = isset($request->loai_id) ? $request->loai_id : 8;
+        $cate_id = isset($request->cate_id) ? $request->cate_id : null;
 
         $name = isset($request->name) && $request->name != '' ? $request->name : '';
         
@@ -30,6 +32,9 @@ class ThongTinChungController extends Controller
 
         if( $loai_id > 0){
             $query->where('loai_id', $loai_id);
+        }
+        if( $cate_id > 0){
+            $query->where('cate_id', $cate_id);
         }
         // check editor
         if( Auth::user()->role < 3 ){
@@ -42,8 +47,12 @@ class ThongTinChungController extends Controller
         $items = $query->orderBy('id', 'desc')->paginate(20);
         
         $loaiSpList = ThongTinChung::where('loai_id', $loai_id)->get();
-        
-        return view('backend.thong-tin-chung.index', compact( 'items', 'loaiSpList' , 'name', 'loai_id' ));
+         if( $loai_id ){
+            $cateArr = Cate::where('loai_id', $loai_id)->orderBy('display_order')->get();
+        }else{
+            $cateArr = (object) [];
+        }
+        return view('backend.thong-tin-chung.index', compact( 'items', 'loaiSpList' , 'name', 'loai_id', 'cateArr', 'cate_id'));
     }
 
     /**
@@ -69,8 +78,11 @@ class ThongTinChungController extends Controller
                 }
                 
             }
+            
+            $cateArr = Cate::where('loai_id', $loai_id)->select('id', 'name')->orderBy('display_order')->get();
+            
         }
-        return view('backend.thong-tin-chung.create', compact('loai_id', 'thuocTinhArr'));
+        return view('backend.thong-tin-chung.create', compact('loai_id', 'thuocTinhArr', 'cateArr'));
     }
 
     /**
@@ -183,7 +195,8 @@ class ThongTinChungController extends Controller
             }            
         }        
 
-        return view('backend.thong-tin-chung.edit', compact('detail', 'thuocTinhArr', 'spThuocTinhArr'));
+        $cateArr = Cate::where('loai_id', $loai_id)->select('id', 'name')->orderBy('display_order')->get();
+        return view('backend.thong-tin-chung.edit', compact('detail', 'thuocTinhArr', 'spThuocTinhArr', 'cateArr'));
     }
 
     /**

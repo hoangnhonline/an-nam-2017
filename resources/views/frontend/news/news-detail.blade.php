@@ -15,7 +15,7 @@
             <p class="content-date">Ngày tạo: {!! date('d/m/Y H:i', strtotime($detail->created_at)) !!}</p>
             <div class="block">
                 <p class="block_intro">
-                    <img class="lazy" data-original="{!! Helper::showImage($detail->image_url ) !!}" alt="{!! $detail->title !!}">
+                    <img src="{!! Helper::showImage($detail->image_url ) !!}" alt="{!! $detail->title !!}">
                 </p>
                 {!! $detail->content !!}
             </div><!-- /block -->

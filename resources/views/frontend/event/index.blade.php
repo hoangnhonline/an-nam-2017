@@ -35,7 +35,7 @@
                           @foreach( $dataList as $data )
                           <li class="col-sm-6 item-bnr">
                             <div class="thumb-box">
-                              <a href="{{ route('detail-event', $data->slug) }}"><img class="lazy" data-original="{{ Helper::showImage($data->small_banner) }}" alt="{{ $data->name }}"></a>
+                              <a href="{{ route('detail-event', $data->slug) }}"><img src="{{ Helper::showImage($data->small_banner) }}" alt="{{ $data->name }}"></a>
                               <div class="countdown-lastest countdown" data-y="{{ date('Y', strtotime($data->to_date)) }}" data-m="{{ date('m', strtotime($data->to_date)) }}" data-d="{{ date('d', strtotime($data->to_date)) }}" data-h="{{ date('H', strtotime($data->to_date)) }}" data-i="{{ date('i', strtotime($data->to_date)) }}" data-s="{{ date('s', strtotime($data->to_date)) }}"></div>                             
                             </div>
                           </li>

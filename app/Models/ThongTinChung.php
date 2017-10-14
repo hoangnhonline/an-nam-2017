@@ -27,6 +27,7 @@ class ThongTinChung extends Model  {
                             'loai_id', 
                             'thong_so', 
                             'detail', 
+                            'cate_id',
                             'created_user', 
                             'updated_user'];
 

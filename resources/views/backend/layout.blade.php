@@ -75,7 +75,9 @@
 <input type="hidden" id="route_get_slug" value="{{ route('get-slug') }}">
   <div class="control-sidebar-bg"></div>
 </div>
+<input type="hidden" id="url_open_kc_finder" value="{{ URL::asset('public/admin/dist/js/kcfinder/browse.php?type=images') }}">
 <input type="hidden" id="upload_url" value="{{ config('annam.upload_url') }}">
+<input type="hidden" id="app_url" value="{{ env('APP_URL') }}">
 <!-- ./wrapper -->
 
 <!-- jQuery 2.2.3 -->
@@ -85,6 +87,9 @@
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
 <script>
   $.widget.bridge('uibutton', $.ui.button);
+</script>
+<script type="text/javascript">
+  var public_url = '{{ env('APP_URL') }}/public';
 </script>
 <!-- Bootstrap 3.3.6 -->
 <script src="{{ URL::asset('public/admin/bootstrap/js/bootstrap.min.js') }}"></script>

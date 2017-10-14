@@ -54,7 +54,7 @@
                   <div class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="home">
                         <div class="form-group">
-                          <label for="email">Loại sản phẩm<span class="red-star">*</span></label>
+                          <label for="email">Danh mục cha<span class="red-star">*</span></label>
                           <select class="form-control req" name="loai_id" id="loai_id">
                             <option value="">--Chọn--</option>
                             @foreach( $loaiSpList as $value )
@@ -62,7 +62,19 @@
                             >{{ $value->name }}</option>
                             @endforeach
                           </select>
-                        </div>                        
+                        </div>   
+                        <div class="form-group">
+                          <label for="email">Danh mục con<span class="red-star">*</span></label>
+
+                          <select class="form-control req" name="cate_id" id="cate_id">
+                            <option value="">--Chọn--</option>
+                            @foreach( $cateArr as $value )
+                            <option value="{{ $value->id }}" {{ old('cate_id', $detail->cate_id) == $value->id ? "selected"  : "" }}
+                              
+                            >{{ $value->name }}</option>
+                            @endforeach
+                          </select>
+                        </div>                     
                         <div class="form-group" >                  
                           <label>Tên sản phẩm <span class="red-star">*</span></label>
                           <input type="text" class="form-control req" name="name" id="name" value="{{ old('name', $detail->name) }}">

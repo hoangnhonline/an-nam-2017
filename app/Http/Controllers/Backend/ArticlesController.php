@@ -88,60 +88,6 @@ class ArticlesController extends Controller
         
         $dataArr['alias'] = Helper::stripUnicode($dataArr['title']);
         
-        if($dataArr['image_url'] && $dataArr['image_name']){
-            
-            $tmp = explode('/', $dataArr['image_url']);
-
-            if(!is_dir('public/uploads/'.date('Y/m/d'))){
-                mkdir('public/uploads/'.date('Y/m/d'), 0777, true);
-            }
-            /*
-            if(!is_dir('public/uploads/thumbs/articles/'.date('Y/m/d'))){
-                mkdir('public/uploads/thumbs/articles/'.date('Y/m/d'), 0777, true);
-            }
-            if(!is_dir('public/uploads/thumbs/articles/325x200/'.date('Y/m/d'))){
-                mkdir('public/uploads/thumbs/articles/325x200/'.date('Y/m/d'), 0777, true);
-            }
-*/
-            $destionation = date('Y/m/d'). '/'. end($tmp);
-            
-            File::move(config('annam.upload_path').$dataArr['image_url'], config('annam.upload_path').$destionation);
-            /*
-            $img = Image::make(config('annam.upload_path').$destionation);
-            $w_img = $img->width();
-            $h_img = $img->height();
-            $tile1 = 0.07697044;
-            $w_tile1 = $w_img/250;
-            $h_tile1 = $h_img/140;
-         
-            if($w_tile1- $h_tile1 <= $tile1){
-                Image::make(config('annam.upload_path').$destionation)->resize(203, null, function ($constraint) {
-                        $constraint->aspectRatio();
-                })->crop(203, 128)->save(config('annam.upload_thumbs_path_articles').$destionation);
-            }else{
-                Image::make(config('annam.upload_path').$destionation)->resize(null, 128, function ($constraint) {
-                        $constraint->aspectRatio();
-                })->crop(203, 128)->save(config('annam.upload_thumbs_path_articles').$destionation);
-            }
-
-            $tile2 = 0;
-            $w_tile2 = $w_img/325;
-            $h_tile2 = $h_img/200;
-           
-            if($w_tile2- $h_tile2 <= $tile2){
-                Image::make(config('annam.upload_path').$destionation)->resize(325, null, function ($constraint) {
-                        $constraint->aspectRatio();
-                })->crop(325, 200)->save(config('annam.upload_thumbs_path_articles').'325x200/'.$destionation);
-            }else{
-                dd('123');
-                Image::make(config('annam.upload_path').$destionation)->resize(null, 200, function ($constraint) {
-                        $constraint->aspectRatio();
-                })->crop(325, 200)->save(config('annam.upload_thumbs_path_articles').'325x200/'.$destionation);
-            }
-            */
-            $dataArr['image_url'] = $destionation;
-        }        
-        
         $dataArr['created_user'] = Auth::user()->id;
 
         $dataArr['updated_user'] = Auth::user()->id;
@@ -317,7 +263,7 @@ class ArticlesController extends Controller
         $model = Articles::find($dataArr['id']);
 
         $model->update($dataArr);
-        dd($dataArr);
+        
         $this->storeMeta( $dataArr['id'], $dataArr['meta_id'], $dataArr);
 
         TagObjects::where(['object_id' => $dataArr['id'], 'type' => 2])->delete();

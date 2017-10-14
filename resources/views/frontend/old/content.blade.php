@@ -22,7 +22,7 @@
           <li class="col-sm-5ths col-xs-6 product_item">
             <div class="de_old_img">
               <a href="{{ route('product-detail', [$product->slug, $product->id]) }}" title="{!! $product->name !!}">
-                <img width="150" height="150" alt="{!! $product->name !!}" class="lazy" data-original="{{ $product->image_url ? Helper::showImageThumb($product->image_url) : URL::asset('admin/dist/img/no-image.jpg') }}">
+                <img width="150" height="150" alt="{!! $product->name !!}" src="{{ $product->image_url ? Helper::showImageThumb($product->image_url) : URL::asset('admin/dist/img/no-image.jpg') }}">
               </a>
               <figure class="product_detail_de">
                   @if( $loaiSp->is_hover == 1)            

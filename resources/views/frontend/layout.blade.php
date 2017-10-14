@@ -8,7 +8,7 @@
     <meta name="description" content="@yield('site_description')"/>
     <meta name="keywords" content="@yield('site_keywords')"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1"/>
-    <link rel="shortcut icon" href="@yield('favicon')" type="image/x-icon"/>
+    <link rel="shortcut icon" href="{{ URL::asset('public/assets/favicon.ico') }}" type="image/x-icon"/>
     <link rel="canonical" href="{{ url()->current() }}"/>        
     <meta property="og:locale" content="vi_VN" />
     <meta property="og:type" content="website" />
@@ -16,7 +16,9 @@
     <meta property="og:description" content="@yield('site_description')" />
     <meta property="og:url" content="{{ url()->current() }}" />
     <meta property="og:site_name" content="annammobile.com" />
+    
     <?php $socialImage = isset($socialImage) ? $socialImage : $settingArr['banner']; ?>
+
     <meta property="og:image" content="{{ Helper::showImage($socialImage) }}" />
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <meta name="twitter:card" content="summary" />

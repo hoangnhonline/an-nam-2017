@@ -109,20 +109,7 @@ class ArticlesCateController extends Controller
             'slug.required' => 'Bạn chưa nhập slug',
             'slug.unique' => 'Slug đã được sử dụng.'
         ]);       
-        if($dataArr['image_url'] && $dataArr['image_name']){
-            
-            $tmp = explode('/', $dataArr['image_url']);
-
-            if(!is_dir('public/uploads/'.date('Y/m/d'))){
-                mkdir('public/uploads/'.date('Y/m/d'), 0777, true);
-            }
-
-            $destionation = date('Y/m/d'). '/'. end($tmp);
-            
-            File::move(config('annam.upload_path').$dataArr['image_url'], config('annam.upload_path').$destionation);
-            
-            $dataArr['image_url'] = $destionation;
-        }
+        
         $dataArr['alias'] = Helper::stripUnicode($dataArr['name']);
         
         $model = ArticlesCate::find($dataArr['id']);

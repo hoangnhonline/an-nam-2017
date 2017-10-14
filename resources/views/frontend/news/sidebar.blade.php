@@ -15,7 +15,7 @@
                                         <div class="product-item-info">
                                             <div class="product-item-head">
                                                 <a href="{{ route('product-detail', [$product->slug, $product->id]) }}" class="product-item-photo">
-                                                    <img alt="{!! $product->name !!}" class="lazy" data-original="{{ $product->image_url ? Helper::showImageThumb($product->image_url) : URL::asset('admin/dist/img/no-image.jpg') }}">
+                                                    <img alt="{!! $product->name !!}" src="{{ $product->image_url ? Helper::showImageThumb($product->image_url) : URL::asset('admin/dist/img/no-image.jpg') }}">
                                                 </a>
                                             </div><!-- /product-item-info -->
                                             <div class="product-item-details">

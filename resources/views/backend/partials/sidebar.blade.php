@@ -100,7 +100,7 @@
       <li {{ in_array(\Request::route()->getName(), ['thong-tin-chung.edit', 'thong-tin-chung.index', 'thong-tin-chung.create']) ? "class=active" : "" }}>
         <a href="{{ route('thong-tin-chung.index') }}">
           <i class="fa fa-pencil-square-o"></i> 
-          <span>Thông tin sản phẩm</span>         
+          <span>Thông tin sản phẩm mẫu</span>         
         </a>       
       </li>      
       <li {{ in_array(\Request::route()->getName(), ['contact.edit', 'contact.index']) ? "class=active" : "" }}>

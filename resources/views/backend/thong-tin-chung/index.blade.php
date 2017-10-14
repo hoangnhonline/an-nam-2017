@@ -37,7 +37,16 @@
                 @endforeach
               </select>
             </div>
+            <div class="form-group">
               
+
+              <select class="form-control" name="cate_id" id="cate_id">
+                <option value="">--Danh mục con--</option>
+                @foreach( $cateArr as $value )
+                <option value="{{ $value->id }}" {{ $value->id == $cate_id ? "selected" : "" }}>{{ $value->name }}</option>
+                @endforeach
+              </select>
+            </div>  
             <div class="form-group">              
               <input type="text" class="form-control" name="name" value="{{ $name }}" placeholder="Tên sản phẩm...">
             </div>                
