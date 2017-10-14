@@ -83,7 +83,7 @@
             <tr>
               <th style="width: 1%">#</th>
               <th style="text-align:left">Tên sản phẩm</th>
-              <th style="text-align:right">Giá</th>                              
+              <th style="text-align:right" width="300px">Giá</th>                              
               <th width="100px" style="text-align:center">Hết hàng</th>
               <th width="200px" style="text-align:right">Số lượng</th>
               <th width="1%;white-space:nowrap">Thao tác</th>
@@ -103,25 +103,38 @@
                     
                   </p>                  
                 </td>
-                <td class="text-right">@if( $item->is_sale == 1)
+                <td class="text-right edit_product">
+                <?php 
+                $price = $item->is_sale == 1 ? $item->price_sale : $item->price;
+                $col = $item->is_sale == 1 ? "price_sale" : "price";
+                ?>
+                  <div class="txt_display">
+                  @if( $item->is_sale == 1)
                    <b style="color:red">                  
-                    {{ number_format($item->price_sale) }}
+                    {{ number_format($price) }}
                    </b>
                    <span style="text-decoration: line-through">
                     {{ number_format($item->price) }}  
                     </span>
                     @else
                     <b style="color:red">                  
-                    {{ number_format($item->price) }}
+                    {{ number_format($price) }}
                    </b>
-                    @endif </td>
+                    @endif 
+                    </div>
+                    <div class="div_edit" style="display:none">
+                      <div class="col-sm-9"><input type="text" class="value_change form-control" value="{{ $price }}"></div>
+                      <div class="col-sm-3"><button type="button" data-id="{{ $item->id }}" data-col="{{ $col }}" data-table="product" class="btn btn-primary btn-sm btnSaveChange"><i class="fa fa-save"></i></button></div>
+                    </div>
+                  </td>
                 <td style="text-align:center">
                   <input type="checkbox" data-id="{{ $item->id }}" data-col="het_hang" data-table="product" class="change-value" value="1" {{ $item->het_hang == 1  ? "checked" : "" }}>
                 </td>
-                <td style="text-align:right" class="edit_so_luong"><span class="txt_sl">{{ number_format($item->so_luong_ton) }}</span>
+                <td style="text-align:right" class="edit_product">
+                <span class="txt_display">{{ number_format($item->so_luong_ton) }}</span>
                 <div class="div_edit" style="display:none">
-                  <div class="col-sm-8"><input type="text" class="so_luong_ton form-control" value="{{ $item->so_luong_ton }}"></div>
-                  <div class="col-sm-4"><button type="button" data-id="{{ $item->id }}" class="btn btn-primary btn-sm btnSaveQuantity"><i class="fa fa-save"></i></button></div>
+                  <div class="col-sm-9"><input type="text" class="value_change form-control" value="{{ $item->so_luong_ton }}"></div>
+                  <div class="col-sm-3"><button type="button" data-id="{{ $item->id }}" data-col="so_luong_ton" data-table="product" class="btn btn-primary btn-sm btnSaveChange"><i class="fa fa-save"></i></button></div>
                 </div>
                 </td>
                 <td style="white-space:nowrap; text-align:right">
@@ -173,25 +186,25 @@ function callDelete(name, url){
   return flag;
 }
 $(document).ready(function(){
-  $('.btnSaveQuantity').click(function(){
+  $('.btnSaveChange').click(function(){
     var obj = $(this);
-    var so_luong_ton = obj.parents('.div_edit').find('.so_luong_ton').val();
+    var val = obj.parents('.div_edit').find('.value_change').val();
     $.ajax({
       url : "{{ route('change-value') }}",
       type :'POST',
       data : {
         id : obj.data('id'),
-        value : so_luong_ton,
-        column : 'so_luong_ton',
-        table : 'product'
+        value : val,
+        column : obj.data('col'),
+        table : obj.data('table')
       },
       success : function(data){        
         location.reload();
       }
     });
   });
-  $('.edit_so_luong').click(function(){
-    $(this).find('.txt_sl').hide();
+  $('.edit_product').click(function(){
+    $(this).find('.txt_display').hide();
     $(this).find('.div_edit').show();
   });
   $('.change-value').change(function(){

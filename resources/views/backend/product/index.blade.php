@@ -114,16 +114,19 @@
                   @endif<br />
                   <strong style="color:#337ab7;font-style:italic"> {{ $item->ten_loai }} / {{ $item->ten_cate }}</strong>
                  <p style="margin-top:10px">
+                 <?php 
+                 $price = $item->is_sale == 1 ? $item->price_sale : $item->price;
+                 ?>
                     @if( $item->is_sale == 1)
                    <b style="color:red">                  
-                    {{ number_format($item->price_sale) }}
+                    {{ number_format($price) }}
                    </b>
                    <span style="text-decoration: line-through">
                     {{ number_format($item->price) }}  
                     </span>
                     @else
                     <b style="color:red">                  
-                    {{ number_format($item->price) }}
+                    {{ number_format($price) }}
                    </b>
                     @endif 
                   </p>                  
