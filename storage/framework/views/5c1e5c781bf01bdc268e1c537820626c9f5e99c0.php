@@ -3,11 +3,11 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
   <h1>
-    Máy cũ giá rẻ
+    Kho máy mới 
   </h1>
   <ol class="breadcrumb">
     <li><a href="#"><i class="fa fa-dashboard"></i> Dashboard</a></li>
-    <li><a href="<?php echo e(route( 'old.index' )); ?>">Máy cũ giá rẻ</a></li>
+    <li><a href="<?php echo e(route( 'product.kho' )); ?>">Kho máy mới</a></li>
     <li class="active">Danh sách</li>
   </ol>
 </section>
@@ -18,14 +18,13 @@
     <div class="col-md-12">
       <?php if(Session::has('message')): ?>
       <p class="alert alert-info" ><?php echo e(Session::get('message')); ?></p>
-      <?php endif; ?>
-      <a href="<?php echo e(route('old.create', ['loai_id' => $arrSearch['loai_id'], 'cate_id' => $arrSearch['cate_id']])); ?>" class="btn btn-info btn-sm" style="margin-bottom:5px">Tạo mới</a>
+      <?php endif; ?>      
       <div class="panel panel-default">
         <div class="panel-heading">
           <h3 class="panel-title">Bộ lọc</h3>
         </div>
         <div class="panel-body">
-          <form class="form-inline" id="searchForm" role="form" method="GET" action="<?php echo e(route('old.index')); ?>">
+          <form class="form-inline" id="searchForm" role="form" method="GET" action="<?php echo e(route('product.kho')); ?>">
             <div class="form-group">
              
               <select class="form-control" name="loai_id" id="loai_id">
@@ -54,6 +53,9 @@
             <div class="form-group">
               <label><input type="checkbox" name="is_sale" value="1" <?php echo e($arrSearch['is_sale'] == 1 ? "checked" : ""); ?>> SALE</label>              
             </div>
+            <div class="form-group">
+              <label><input type="checkbox" name="het_hang" value="1" <?php echo e($arrSearch['het_hang'] == 1 ? "checked" : ""); ?>> Hết hàng</label>              
+            </div>
                
             <button type="submit" style="margin-top:-5px" class="btn btn-primary btn-sm">Lọc</button>
           </form>         
@@ -81,13 +83,10 @@
           <table class="table table-bordered" id="table-list-data">
             <tr>
               <th style="width: 1%">#</th>
-              <?php if($arrSearch['is_hot'] == 1 && $arrSearch['loai_id'] > 0 ): ?>
-              <th style="width: 1%;white-space:nowrap">Thứ tự</th>
-              <?php endif; ?>
-              <th width="100px">Hình ảnh</th>
-              <th style="text-align:left">Thông tin sản phẩm</th>                              
-              <th width="100px" style="text-align:center">Nổi bật</th>
-              <th width="100px" style="text-align:right">Số lượng</th>
+              <th style="text-align:left">Tên sản phẩm</th>
+              <th style="text-align:right">Giá</th>                              
+              <th width="100px" style="text-align:center">Hết hàng</th>
+              <th width="200px" style="text-align:right">Số lượng</th>
               <th width="1%;white-space:nowrap">Thao tác</th>
             </tr>
             <tbody>
@@ -99,24 +98,21 @@
                 ?>
               <tr id="row-<?php echo e($item->id); ?>">
                 <td><span class="order"><?php echo e($i); ?></span></td>
-                <?php if($arrSearch['is_hot'] == 1 && $arrSearch['loai_id'] > 0 ): ?>
-                <td style="vertical-align:middle;text-align:center">
-                 <input type="text" name="display_order[]" value="<?php echo e($item->display_order); ?>" class="form-control" style="width:60px">
-                    <input type="hidden" name="id[]" value="<?php echo e($item->id); ?>">
-                </td>
-                <?php endif; ?>
-                <td>
-                  <img class="img-thumbnail lazy" width="80" data-original="<?php echo e($item->image_url ? Helper::showImage($item->image_url) : URL::asset('public/admin/dist/img/no-image.jpg')); ?>" alt="<?php echo e($item->name); ?>" title="<?php echo e($item->name); ?>" />
-                </td>
                 <td>                  
-                  <a style="color:#333;font-weight:bold" href="<?php echo e(route( 'old.edit', [ 'id' => $item->id ])); ?>"><?php echo e($item->name); ?> <?php echo e($item->name_extend); ?></a> &nbsp; <?php if( $item->is_hot == 1 ): ?>
-                  <img class="img-thumbnail" src="<?php echo e(URL::asset('public/admin/dist/img/star.png')); ?>" alt="Nổi bật" title="Nổi bật" />
-                  <?php endif; ?><br />
-                  <strong style="color:#337ab7;font-style:italic"> <?php echo e($item->ten_loai); ?> / <?php echo e($item->ten_cate); ?></strong>
+                  <a style="color:#333;font-weight:bold" href="<?php echo e(route( 'product.edit', [ 'id' => $item->id ])); ?>"><?php echo e($item->name); ?> <?php echo e($item->name_extend); ?></a>
                  <p style="margin-top:10px">
-                    <?php if( $item->is_sale == 1): ?>
+                    
+                  </p>                  
+                </td>
+                <td class="text-right edit_product">
+                <?php 
+                $price = $item->is_sale == 1 ? $item->price_sale : $item->price;
+                $col = $item->is_sale == 1 ? "price_sale" : "price";
+                ?>
+                  <div class="txt_display">
+                  <?php if( $item->is_sale == 1): ?>
                    <b style="color:red">                  
-                    <?php echo e(number_format($item->price_sale)); ?>
+                    <?php echo e(number_format($price)); ?>
 
                    </b>
                    <span style="text-decoration: line-through">
@@ -124,23 +120,28 @@
                     </span>
                     <?php else: ?>
                     <b style="color:red">                  
-                    <?php echo e(number_format($item->price)); ?>
+                    <?php echo e(number_format($price)); ?>
 
                    </b>
                     <?php endif; ?> 
-                  </p>                  
-                </td>
+                    </div>
+                    <div class="div_edit" style="display:none">
+                      <div class="col-sm-9"><input type="text" class="value_change form-control" value="<?php echo e($price); ?>"></div>
+                      <div class="col-sm-3"><button type="button" data-id="<?php echo e($item->id); ?>" data-col="<?php echo e($col); ?>" data-table="product" class="btn btn-primary btn-sm btnSaveChange"><i class="fa fa-save"></i></button></div>
+                    </div>
+                  </td>
                 <td style="text-align:center">
-                  <input type="checkbox" data-id="<?php echo e($item->id); ?>" data-col="is_hot" data-table="product" class="change-value" value="1" <?php echo e($item->is_hot == 1  ? "checked" : ""); ?>>
+                  <input type="checkbox" data-id="<?php echo e($item->id); ?>" data-col="het_hang" data-table="product" class="change-value" value="1" <?php echo e($item->het_hang == 1  ? "checked" : ""); ?>>
                 </td>
-                <td style="text-align:right"><?php echo e(number_format($item->so_luong_ton)); ?></td>
+                <td style="text-align:right" class="edit_product">
+                <span class="txt_display"><?php echo e(number_format($item->so_luong_ton)); ?></span>
+                <div class="div_edit" style="display:none">
+                  <div class="col-sm-9"><input type="text" class="value_change form-control" value="<?php echo e($item->so_luong_ton); ?>"></div>
+                  <div class="col-sm-3"><button type="button" data-id="<?php echo e($item->id); ?>" data-col="so_luong_ton" data-table="product" class="btn btn-primary btn-sm btnSaveChange"><i class="fa fa-save"></i></button></div>
+                </div>
+                </td>
                 <td style="white-space:nowrap; text-align:right">
-                  <a class="btn btn-default btn-sm" href="<?php echo e(route('product-detail', [$item->slug , $item->id] )); ?>" target="_blank"><i class="fa fa-eye" aria-hidden="true"></i> Xem</a>
-                  <a href="<?php echo e(route( 'old.copy', [ 'id' => $item->id ])); ?>" class="btn btn-info btn-sm">Copy</a>
-                  <a href="<?php echo e(route( 'old.edit', [ 'id' => $item->id ])); ?>" class="btn btn-warning btn-sm">Chỉnh sửa</a>                 
-
-                  <a onclick="return callDelete('<?php echo e($item->name); ?>','<?php echo e(route( 'old.destroy', [ 'id' => $item->id ])); ?>');" class="btn btn-danger btn-sm">Xóa</a>
-
+                  <a href="<?php echo e(route( 'product.edit', [ 'id' => $item->id ])); ?>" class="btn btn-warning btn-sm">Chỉnh sửa</a>
                 </td>
               </tr> 
               <?php endforeach; ?>
@@ -189,6 +190,27 @@ function callDelete(name, url){
   return flag;
 }
 $(document).ready(function(){
+  $('.btnSaveChange').click(function(){
+    var obj = $(this);
+    var val = obj.parents('.div_edit').find('.value_change').val();
+    $.ajax({
+      url : "<?php echo e(route('change-value')); ?>",
+      type :'POST',
+      data : {
+        id : obj.data('id'),
+        value : val,
+        column : obj.data('col'),
+        table : obj.data('table')
+      },
+      success : function(data){        
+        location.reload();
+      }
+    });
+  });
+  $('.edit_product').click(function(){
+    $(this).find('.txt_display').hide();
+    $(this).find('.div_edit').show();
+  });
   $('.change-value').change(function(){
     var obj = $(this);
     var val = 0;
@@ -205,7 +227,7 @@ $(document).ready(function(){
         table : obj.data('table')
       },
       success : function(data){
-        console.log(data);
+        location.reload();
       }
     });
   });

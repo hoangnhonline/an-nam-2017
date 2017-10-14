@@ -26,7 +26,7 @@ class LineShape extends \Intervention\Image\AbstractShape
      *
      * @var string
      */
-    public $color = '#000000';
+    public $color = '#ff0000';
 
     /**
      * Width of line in pixels
