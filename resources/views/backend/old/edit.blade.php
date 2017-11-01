@@ -123,7 +123,7 @@
                           </div>                          
                         </div>
                         
-                        <div class="form-group col-md-6 none-padding" >                  
+                        <div class="form-group" >                  
                             <label>Giá<span class="red-star">*</span></label>
                             <input type="text" class="form-control req number" name="price" id="price" value="{{ old('price', $detail->price) }}">
                         </div>                                               
