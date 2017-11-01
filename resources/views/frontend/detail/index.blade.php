@@ -169,7 +169,7 @@
                                 </h3>
                                 <div class="block_content">
                                     <div class="block-content grid-float-products  carousel-products ">
-                                        <div class="product-items owl-carousel nav-top-right nav-border nav-sm" data-nav="true" data-dots="false" data-margin="30" data-responsive='{"0":{"items":1},"480":{"items":1},"600":{"items":1},"992":{"items":1}}'>
+                                        <div class="product-items owl-carousel nav-top-right nav-border nav-sm" data-nav="true" adaptiveHeight data-dots="false" data-margin="30" data-responsive='{"0":{"items":1},"480":{"items":1},"600":{"items":1},"992":{"items":1}}'>
                                             <div class="item">
                                             <?php $i = 0;?>
                                                 @foreach($otherList as $product)
@@ -259,6 +259,7 @@ $(document).ready(function () {
             infiniteLoop: false,
             hideControlOnEnd: true,
             mode: 'fade',
+            adaptiveHeight : true
         });
 
         $(".pro-thumb-img").bxSlider({
