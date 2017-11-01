@@ -81,7 +81,7 @@
                         </div> 
                         <div class="form-group" >                  
                           <label>Giá máy mới<span class="red-star">*</span></label>
-                          <input type="text" class="form-control req" name="price" id="price" value="{{ old('price') }}">
+                          <input type="text" class="form-control req number" name="price" id="price" value="{{ old('price') }}">
                         </div>                         
                         <div class="form-group">
                           <label>Chi tiết</label>
