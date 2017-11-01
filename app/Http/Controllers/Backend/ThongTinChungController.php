@@ -97,18 +97,20 @@ class ThongTinChungController extends Controller
         
         $this->validate($request,[            
             'loai_id' => 'required',            
-            'name' => 'required'            
+            'name' => 'required',
+            'price' => 'required'                      
         ],
         [            
             'loai_id.required' => 'Bạn chưa chọn danh mục',            
-            'name.required' => 'Bạn chưa nhập tên'          
+            'name.required' => 'Bạn chưa nhập tên',
+            'price.required' => 'Bạn chưa nhập giá máy mới',
         ]);              
         
         
         $dataArr['created_user'] = Auth::user()->id;
 
         $dataArr['updated_user'] = Auth::user()->id; 
-
+        $dataArr['price'] = str_replace(',', '', $request->price);
         if( !empty($dataArr['thuoc_tinh'])){
             foreach( $dataArr['thuoc_tinh'] as $k => $value){
                 if( $value == ""){
@@ -212,12 +214,14 @@ class ThongTinChungController extends Controller
         
         $this->validate($request,[            
             'loai_id' => 'required',            
-            'name' => 'required'            
+            'name' => 'required',
+            'price' => 'required'                      
         ],
         [            
             'loai_id.required' => 'Bạn chưa chọn danh mục',            
-            'name.required' => 'Bạn chưa nhập tên sản phẩm '
-        ]);       
+            'name.required' => 'Bạn chưa nhập tên',
+            'price.required' => 'Bạn chưa nhập giá máy mới',
+        ]); 
         
         if( !empty($dataArr['thuoc_tinh'])){
             foreach( $dataArr['thuoc_tinh'] as $k => $value){
@@ -226,7 +230,7 @@ class ThongTinChungController extends Controller
                 }
             }
         }
-        
+        $dataArr['price'] = str_replace(',', '', $request->price);
         $dataArr['thong_so'] = json_encode($dataArr['thuoc_tinh']);
 
         $dataArr['updated_user'] = Auth::user()->id;

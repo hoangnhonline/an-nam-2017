@@ -78,7 +78,11 @@
                         <div class="form-group" >                  
                           <label>Tên sản phẩm<span class="red-star">*</span></label>
                           <input type="text" class="form-control req" name="name" id="name" value="{{ old('name') }}">
-                        </div>                       
+                        </div> 
+                        <div class="form-group" >                  
+                          <label>Giá máy mới<span class="red-star">*</span></label>
+                          <input type="text" class="form-control req" name="price" id="price" value="{{ old('price') }}">
+                        </div>                         
                         <div class="form-group">
                           <label>Chi tiết</label>
                           <textarea class="form-control" rows="10" name="detail" id="detail">{{ old('detail') }}</textarea>

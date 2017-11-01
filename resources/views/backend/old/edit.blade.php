@@ -126,11 +126,7 @@
                         <div class="form-group col-md-6 none-padding" >                  
                             <label>Giá<span class="red-star">*</span></label>
                             <input type="text" class="form-control req number" name="price" id="price" value="{{ old('price', $detail->price) }}">
-                        </div>                       
-                        <div class="form-group col-md-6" >                  
-                            <label>Giá máy mới</label>
-                            <input type="text" class="form-control number {{ old('is_old', $detail->is_old) == 1  ? "req" : "" }}" name="price_new" id="price_new" value="{{ old('price_new', $detail->price_new) }}">
-                        </div>
+                        </div>                                               
                          <div class="col-md-6 none-padding">
                           <label>Số lượng tồn<span class="red-star">*</span></label>                  
                           <input type="text" class="form-control req number" name="so_luong_ton" id="so_luong_ton" value="{{ old('so_luong_ton', $detail->so_luong_ton) }}">                        
