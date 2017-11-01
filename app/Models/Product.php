@@ -69,6 +69,6 @@ class Product extends Model  {
         return $this->hasOne('App\Models\SpThuocTinh', 'product_id');
     }
     public function thongtinchung(){
-        return $this->hasOne('App\Models\ThongTinChung', 'thong_tin_chung_id');
+        return $this->hasOne('App\Models\ThongTinChung',  'id', 'thong_tin_chung_id');
     }
 }

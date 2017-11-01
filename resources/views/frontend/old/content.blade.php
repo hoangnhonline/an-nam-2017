@@ -57,10 +57,10 @@
               </h3>
               <div class="product_price">
               <p class="price_title price_now">Giá : <span>{{ number_format($product->price) }}₫</span></p>
-                @if($product->price_new)
-                <p class="price_title price_old">Giá máy mới: <span>{{ number_format($product->price_new) }}₫</span></p>
+                @if($product->thongtinchung->price)
+                <p class="price_title price_old">Giá máy mới: <span>{{ number_format($product->thongtinchung->price) }}₫</span></p>
 
-                <p class="price_title price_compare">Rẻ hơn máy mới: <span>{{ number_format($product->price_new - $product->price) }}₫</span></p>
+                <p class="price_title price_compare">Rẻ hơn máy mới: <span>{{ number_format($product->thongtinchung->price - $product->price) }}₫</span></p>
                 @endif
             </div> 
             @if($product->is_sale)
