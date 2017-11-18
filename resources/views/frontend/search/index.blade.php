@@ -69,7 +69,7 @@
                                     {!! $info->text_hien_thi !!}: 
                                     <?php
                                     
-                                    $spThuocTinhArr = json_decode( $product->thongtinchung->thong_so true);                 
+                                    $spThuocTinhArr = json_decode( $product->thongtinchung->thong_so);                 
                                     
                                     $countT = 0; $totalT = count($tmpInfo);
                                     foreach( $tmpInfo as $tinfo){
