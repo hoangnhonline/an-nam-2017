@@ -129,19 +129,19 @@
                                         <label for="gender-female">Chị</label>
                                     </div>
 								</div>
-								<input type="text" name="full_name" id="full_name" value="{!! old('full_name') !!}" placeholder="Họ và tên" class="fullname ip_precheck">
+								<input type="text" name="full_name" id="full_name" value="{!! old('full_name') !!}" placeholder="Họ và tên" class="fullname ip_precheck req">
 							</div><!-- /row-group -->
 							<div class="row-group">
-								<input type="text" name="phone" id="phone" value="{!! old('phone') !!}" placeholder="Điện thoại liên hệ" class="phone ip_precheck">
+								<input type="text" name="phone" id="phone" value="{!! old('phone') !!}" placeholder="Điện thoại liên hệ" class="phone ip_precheck req" maxlength="11">
 							</div><!-- /row-group -->
 							<div class="row-group">
-                                <input type="email" name="email" id="email" value="{!! old('email') !!}" placeholder="Email (cần nhập email để nhận được thông tin đơn hàng từ Ân Nam)" class="email ip_precheck">
+                                <input type="email" name="email" id="email" value="{!! old('email') !!}" placeholder="Email (cần nhập email để nhận được thông tin đơn hàng từ Ân Nam)" class="email ip_precheck req">
                             </div><!-- /row-group -->
                             <div class="row-group clearfix">
                             	<label class="titaddress"><i class="fa fa-location-arrow"></i>Địa chỉ, thời gian GIAO HÀNG NHANH</label>
                             	<div class="add_info row">
                             		<p class="col-sm-6 col-xs-6 city">
-                                		<select class="ip_precheck sl-2" data-width="100%" name="city_id" id="city_id">
+                                		<select class="ip_precheck sl-2 req" data-width="100%" name="city_id" id="city_id">
 										 	<option value="">Chọn Tỉnh/Thành phố</option>
 			                                @foreach($cityList as $city)
 			                                  <option value="{{ $city->id }}" {{ old('district_id') == $city->id  ? "selected=selected" : "" }}                                  
@@ -150,14 +150,14 @@
 										</select>
                                 	</p>
                                 	<p class="col-sm-6 col-xs-6 district">
-                                		<select class="ip_precheck sl-2" data-width="100%" name="district_id" id="district_id">
+                                		<select class="ip_precheck sl-2 req" data-width="100%" name="district_id" id="district_id">
 										 	<option value="" selected>Chọn Quận/Huyện</option>											
 										</select>
                                 	</p>
                             	</div>
                             </div><!-- /row-group -->
                             <div class="row-group">
-                            	<input type="text" name="address" id="address" value="{!! old('address') !!}" placeholder="Số nhà - Tên đường" class="ip_precheck address">
+                            	<input type="text" name="address" id="address" value="{!! old('address') !!}" placeholder="Số nhà - Tên đường" class="ip_precheck address req">
                             </div><!-- /row-group -->
                             <div class="row-group">
                             	<textarea name="notes" id="notes" placeholder="Ghi chú khi giao hàng (vd: ngày, giờ giao hàng)" class="ip_precheck comment">{!! old('notes') !!}</textarea>
@@ -182,7 +182,7 @@
 			</div>
 			<div class="row block customer-frm">
                 <div class="col-md-6 col-sm-6 checkout-wrap">
-                    <input type="submit" name="" id="btnPayment" value="XÁC NHẬN ĐẶT HÀNG" class="btn-red sbm-checkout">
+                    <input type="button" name="" id="btnPayment" value="XÁC NHẬN ĐẶT HÀNG" class="btn-red sbm-checkout">
                     <button type="button" class="btn btn-danger" id="btnLoading" disabled="disabled" style="display:none;width:145px"><i class="fa fa-spin fa-spinner"></i></button>
                 </div>
                 {{ csrf_field() }}
@@ -197,6 +197,9 @@
 	.pre_checkout .cart-link{
 		display: block !important;
 	}
+	input.error, select.error{		
+		border: 1px solid red !important;
+	}
 </style>
 @stop
 @section('js')
@@ -209,15 +212,48 @@
 	      	getDistrict($(this).val());
 	      });	  
 	      $('#btnPayment').click(function(){
-	      	$(this).hide();
-	      	$('#btnLoading').show();
-	      	//$(this).attr('disabled', 'disabled').val('<i class="fa fa-spin fa-spinner"></i>');
+			var errReq = 0;
+	        $('#frm_order .req').each(function(){
+	          var obj = $(this);
+	          if(obj.val() == '' || obj.val() == '0'){
+	            errReq++;
+	            obj.addClass('error');
+	          }else{
+	            obj.removeClass('error');
+	          }
+	        });
+	        if(errReq > 0){          
+	         $('html, body').animate({
+	              scrollTop: $("#frm_order").offset().top
+	          }, 500);
+	          return false;
+	        }	      	
+	      	if(validateEmail($('#email').val())== false){
+	      		alert('Email không hợp lệ'); return false;
+	      	}
+	      	if(phonenumber($('#phone').val())== false){
+	      		alert('Số điện thoại không hợp lệ'); return false;
+	      	}
+	      	
+	      	$(this).parents('form').submit();
+	      	$(this).attr('disabled', 'disabled').html('<i class="fa fa-spin fa-spinner"></i>');
+	      	
 	      });    
+	      
 	});
 	function validateEmail(email) {
       var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
       return re.test(email);
   }
+  function phonenumber(inputtxt) {
+	  var phoneno = /^[(]{0,1}[0-9]{3}[)]{0,1}[-\s\.]{0,1}[0-9]{3}[-\s\.]{0,1}[0-9]{4}$/;
+	  if(phoneno.test(inputtxt)) {
+	    return true;
+	  }
+	  else {	    
+	    return false;
+	  }
+	}
   function getDistrict(city_id) {
 
     if(!city_id) {

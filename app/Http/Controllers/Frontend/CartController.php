@@ -138,7 +138,7 @@ class CartController extends Controller
         ],
         [
             'full_name.required' => 'Quý khách chưa nhập họ tên',
-            'phone.required' => 'Quý khách chưa nhập điện thoại liên hệ',
+            'phone.required' => 'Quý khách chưa nhập điện thoại liên hệ',           
             'email.required' => 'Quý khách chưa nhập email',
             'city_id.required' => 'Quý khách chưa chọn tỉnh/thành',
             'district_id.required' => 'Quý khách chưa chọn quận/huyện',
@@ -186,7 +186,7 @@ class CartController extends Controller
             OrderDetail::create($dataDetail); 
         }
         
-        $emailArr = array_merge([$email], ['hoangnhonline@gmail.com']);
+        $emailArr = array_merge([$email], ['tinphan@annammobile.com', 'hoangnhonline@gmail.com']);
         
         // send email
         $order_id =str_pad($order_id, 6, "0", STR_PAD_LEFT);
