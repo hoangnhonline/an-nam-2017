@@ -61,11 +61,6 @@
 	
 	<div class="wrapper">
 
-		<header class="header-bar">
-			<div class="container">
-				<div class="row"></div>
-			</div>
-		</header><!-- /header -->
 
 		<main class="main">
 			<div class="container">

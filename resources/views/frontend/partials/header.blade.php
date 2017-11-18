@@ -25,7 +25,7 @@
 			</div><!-- /block_search -->
 			<div class="block_face col-md-4 col-sm-4">
 				<div class="block_face_inner">
-					<div class="fb-page" data-href="https://www.facebook.com/%C3%82n-Nam-Mobile-451564998511224/" data-width="360" data-height="72" data-small-header="true" data-adapt-container-width="false" data-hide-cover="false" data-show-facepile="false" data-show-posts="false"><div class="fb-xfbml-parse-ignore"><blockquote cite="https://www.facebook.com/%C3%82n-Nam-Mobile-451564998511224/"><a href="https://www.facebook.com/%C3%82n-Nam-Mobile-451564998511224/">Facebook</a></blockquote></div></div>
+					<div class="fb-page" data-href="{{ $settingArr['facebook_fanpage'] }}" data-width="360" data-height="72" data-small-header="true" data-adapt-container-width="false" data-hide-cover="false" data-show-facepile="false" data-show-posts="false"><div class="fb-xfbml-parse-ignore"><blockquote cite="{{ $settingArr['facebook_fanpage'] }}"><a href="{{ $settingArr['facebook_fanpage'] }}">Facebook</a></blockquote></div></div>
 				</div>
 			</div><!-- /block_face -->
 		</div><!-- /block_header_top -->
