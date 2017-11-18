@@ -100,13 +100,7 @@
           <li {{ in_array(\Request::route()->getName(), ['articles.create']) ? "class=active" : "" }} ><a href="{{ route('articles.create', ['cate_id' => 1]) }}"><i class="fa fa-circle-o"></i> Thêm bài viết</a></li>                    
         </ul>
        
-      </li>
-      <li {{ in_array(\Request::route()->getName(), ['newsletter.edit', 'newsletter.index']) ? "class=active" : "" }}>
-        <a href="{{ route('newsletter.index') }}">
-          <i class="fa fa-pencil-square-o"></i> 
-          <span>Newsletter</span>         
-        </a>       
-      </li>
+      </li>      
       <li {{ in_array(\Request::route()->getName(), ['thong-tin-chung.edit', 'thong-tin-chung.index', 'thong-tin-chung.create']) ? "class=active" : "" }}>
         <a href="{{ route('thong-tin-chung.index') }}">
           <i class="fa fa-pencil-square-o"></i> 
@@ -141,7 +135,7 @@
           </span>
         </a>
         <ul class="treeview-menu">
-          <li {{ \Request::route()->getName() == "settings.index" ? "class=active" : "" }}><a href="{{ route('settings.index') }}"><i class="fa fa-circle-o"></i> Thông tin annammobile.com</a></li>
+          <li {{ \Request::route()->getName() == "settings.index" ? "class=active" : "" }}><a href="{{ route('settings.index') }}"><i class="fa fa-circle-o"></i> Thông tin</a></li>
           <li {{ \Request::route()->getName() == "info-seo.index" ? "class=active" : "" }}><a href="{{ route('info-seo.index') }}"><i class="fa fa-circle-o"></i> Cài đặt SEO</a></li>
           <li {{ \Request::route()->getName() == "account.index" ? "class=active" : "" }}><a href="{{ route('account.index') }}"><i class="fa fa-circle-o"></i> Users</a></li>
           <li {{ \Request::route()->getName() == "loai-thuoc-tinh.index" ? "class=active" : "" }}><a href="{{ route('loai-thuoc-tinh.index') }}"><i class="fa fa-circle-o"></i> Loại thuộc tính</a></li>

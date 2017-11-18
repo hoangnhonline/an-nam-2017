@@ -55,22 +55,7 @@
                   <label>Facebook APP ID</label>
                   <input type="text" class="form-control" name="facebook_appid" id="facebook_appid" value="{{ $settingArr['facebook_appid'] }}">
                 </div>
-                <div class="form-group">
-                  <label>Google +</label>
-                  <input type="text" class="form-control" name="google_fanpage" id="google_fanpage" value="{{ $settingArr['google_fanpage'] }}">
-                </div>
-                <div class="form-group">
-                  <label>Twitter</label>
-                  <input type="text" class="form-control" name="twitter_fanpage" id="twitter_fanpage" value="{{ $settingArr['twitter_fanpage'] }}">
-                </div>
-                <div class="form-group">
-                  <label>Email CC</label>
-                  <textarea class="form-control" rows="3" name="email_cc" id="email_cc">{{ $settingArr['email_cc'] }}</textarea>
-                </div>
-                <div class="form-group">
-                  <label>Mô tả chung</label>
-                  <textarea class="form-control" rows="7" name="mo_ta_sp" id="mo_ta_sp">{{ $settingArr['mo_ta_sp'] }}</textarea>
-                </div>
+                
                 <div class="form-group">
                   <label>Code google analystic </label>
                   <input type="text" class="form-control" name="google_analystic" id="google_analystic" value="{{ $settingArr['google_analystic'] }}">
