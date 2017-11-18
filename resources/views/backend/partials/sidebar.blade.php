@@ -45,7 +45,19 @@
           <li {{ \Request::route()->getName() == "product.kho" ? "class=active" : "" }}><a href="{{ route('product.kho') }}"><i class="fa fa-circle-o"></i> Quản lý kho</a></li>    
         </ul>
       </li>
-      
+      <li class="treeview {{ in_array(\Request::route()->getName(), ['loai-sp.index', 'loai-sp.edit', 'loai-sp.create', 'cate.index', 'cate.edit', 'cate.create']) ? 'active' : '' }}">
+        <a href="#">
+          <i class="fa fa-opencart"></i> 
+          <span>Danh mục sản phẩm</span>
+          <span class="pull-right-container">
+            <i class="fa fa-angle-left pull-right"></i>
+          </span>
+        </a>
+        <ul class="treeview-menu">         
+          <li {{ in_array(\Request::route()->getName(), ['loai-sp.index', 'loai-sp.edit', 'loai-sp.create']) ? "class=active" : "" }}><a href="{{ route('loai-sp.index') }}"><i class="fa fa-circle-o"></i> Danh mục cha</a></li>
+          <li {{ in_array(\Request::route()->getName(), ['cate.index', 'cate.edit', 'cate.create']) ? "class=active" : "" }}><a href="{{ route('cate.index') }}"><i class="fa fa-circle-o"></i> Danh mục con</a></li>         
+        </ul>
+      </li>
       <li class="treeview {{ \Request::route()->getName() == "orders.index" ? "active" : "" }}">
         <a href="#">
           <i class="fa fa-reorder"></i> 
