@@ -4,11 +4,11 @@
   <!-- Content Header (Page header) -->
   <section class="content-header">
     <h1>
-      Danh mục cha     
+      Loại sản phẩm     
     </h1>
     <ol class="breadcrumb">
       <li><a href="#"><i class="fa fa-dashboard"></i> Dashboard</a></li>
-      <li><a href="{{ route('loai-sp.index') }}">Danh mục cha</a></li>
+      <li><a href="{{ route('loai-sp.index') }}">Loại sản phẩm</a></li>
       <li class="active">Chỉnh sửa</li>
     </ol>
   </section>

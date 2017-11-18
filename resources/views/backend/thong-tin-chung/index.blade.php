@@ -31,7 +31,7 @@
             <div class="form-group">
              
               <select class="form-control" name="loai_id" id="loai_id">
-                <option value="">--Danh mục cha--</option>
+                <option value="">--Loại sản phẩm--</option>
                 @foreach( $loaiSpList as $value )
                 <option value="{{ $value->id }}" {{ $value->id == $loai_id ? "selected" : "" }}>{{ $value->name }}</option>
                 @endforeach
@@ -41,7 +41,7 @@
               
 
               <select class="form-control" name="cate_id" id="cate_id">
-                <option value="">--Danh mục con--</option>
+                <option value="">--Thương hiệu--</option>
                 @foreach( $cateArr as $value )
                 <option value="{{ $value->id }}" {{ $value->id == $cate_id ? "selected" : "" }}>{{ $value->name }}</option>
                 @endforeach

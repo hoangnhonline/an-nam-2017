@@ -52,7 +52,7 @@
                    
                     <div role="tabpanel" class="tab-pane active" id="home">
                         <div class="form-group col-md-6 none-padding">
-                          <label for="email">Danh mục cha<span class="red-star">*</span></label>
+                          <label for="email">Loại sản phẩm<span class="red-star">*</span></label>
                           <select class="form-control req" name="loai_id" id="loai_id">
                             <option value="">--Chọn--</option>
                             @foreach( $loaiSpArr as $value )
@@ -61,7 +61,7 @@
                           </select>
                         </div>
                           <div class="form-group col-md-6 none-padding pleft-5">
-                          <label for="email">Danh mục con<span class="red-star">*</span></label>
+                          <label for="email">Thương hiệu<span class="red-star">*</span></label>
                           <?php 
                           $loai_id = old('loai_id');
                           if($loai_id > 0){

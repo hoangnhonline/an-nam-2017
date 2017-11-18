@@ -4,11 +4,11 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
   <h1>
-    Danh mục con của : <span class="cate-name">{{ $loaiSp->name }}</span>
+    Thương hiệu của : <span class="cate-name">{{ $loaiSp->name }}</span>
   </h1>
   <ol class="breadcrumb">
     <li><a href="#"><i class="fa fa-dashboard"></i> Dashboard</a></li>
-    <li><a href="{{ route( 'cate.index' ) }}">Danh mục cha</a></li>
+    <li><a href="{{ route( 'cate.index' ) }}">Loại sản phẩm</a></li>
     <li class="active">Danh sách</li>
   </ol>
 </section>

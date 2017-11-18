@@ -4,11 +4,11 @@
   <!-- Content Header (Page header) -->
   <section class="content-header">
     <h1>
-      Danh mục con     
+      Thương hiệu     
     </h1>
     <ol class="breadcrumb">
       <li><a href="#"><i class="fa fa-dashboard"></i> Dashboard</a></li>
-      <li><a href="{{ route('cate.index') }}">Danh mục con</a></li>
+      <li><a href="{{ route('cate.index') }}">Thương hiệu</a></li>
       <li class="active">Chỉnh sửa</li>
     </ol>
   </section>
@@ -45,7 +45,7 @@
                   </div>
               @endif
                <div class="form-group">
-                  <label>Danh mục cha</label>
+                  <label>Loại sản phẩm</label>
                   <select class="form-control" name="loai_id" id="loai_id">                  
                     <option value="0" {{ $detail->loai_id == 0 ? "selected" : "" }}>--chọn--</option>
                     @foreach( $loaiSpArr as $value )

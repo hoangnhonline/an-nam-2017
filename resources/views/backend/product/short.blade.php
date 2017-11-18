@@ -26,7 +26,7 @@
           
             
             <div class="form-group">
-              <label for="email">Danh mục cha&nbsp;</label>
+              <label for="email">Loại sản phẩm&nbsp;</label>
               <select class="form-control" name="loai_id" id="loai_id">
                 <option value="">--Tất cả--</option>
                 @foreach( $loaiSpArr as $value )
@@ -35,7 +35,7 @@
               </select>
             </div>
               <div class="form-group">
-              <label for="email">Danh mục con&nbsp;</label>
+              <label for="email">Thương hiệu&nbsp;</label>
 
               <select class="form-control" name="cate_id" id="cate_id">
                 <option value="">--Tất cả--</option>
