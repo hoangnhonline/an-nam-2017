@@ -79,6 +79,16 @@
                           <label>Tên sản phẩm<span class="red-star">*</span></label>
                           <input type="text" class="form-control req" name="name" id="name" value="{{ old('name') }}">
                         </div> 
+                        <div class="form-group" style="margin-top:10px;margin-bottom:10px">  
+                        <label class="col-md-3 row">Ảnh đại diện ( 200 x 200 px)</label>    
+                        <div class="col-md-9">
+                          <img id="thumbnail-image_url" src="{{ old('image_url') ? Helper::showImage(old('image_url')) : URL::asset('public/admin/dist/img/img.png') }}" class="img-thumbnail" width="145" height="85">
+                       
+                          <button class="btn btn-default btn-sm btnSingleUpload" data-set="image_url" type="button"><span class="glyphicon glyphicon-upload" aria-hidden="true"></span> Upload</button>
+                        </div>
+                        <input type="hidden" name="image_url" id="image_url" value="{{ old('image_url') }}"/> 
+                        <div style="clear:both"></div>
+                      </div>
                         <div class="form-group" >                  
                           <label>Giá máy mới<span class="red-star">*</span></label>
                           <input type="text" class="form-control req number" name="price" id="price" value="{{ old('price') }}">
@@ -101,7 +111,34 @@
                           @foreach( $loaithuoctinh['child'] as $thuoctinh)
                           <tr>
                             <td width="150">{{ $thuoctinh['name']}}</td>
-                            <td><input type="text" class="form-control" name="thuoc_tinh[{{ $thuoctinh['id'] }}]" value="{{ old('thuoc_tinh')[$thuoctinh['id']] }}"></td>
+                            <td>
+                              <?php if($thuoctinh['type'] == 1){ ?>
+                              <input type="text" class="form-control" name="thuoc_tinh[{{ $thuoctinh['id'] }}]" value="{{ old('thuoc_tinh')[$thuoctinh['id']] }}">
+                              <?php }elseif($thuoctinh['type'] == 3){ ?>
+                              <div class="input-group">                                
+                                <select class="form-control" data-value="{{ $thuoctinh['id'] }}" name="thuoc_tinh[{{ $thuoctinh['id'] }}]">
+                                  <option value="">---</option>
+                                  <?php 
+                                  $listtt = DB::table('listtt')->where('tt_id', $thuoctinh['id'])->get();
+                                  if($listtt){                                  
+                                  ?>
+                                  @foreach($listtt as $tt)
+                                    <option value="{{ $tt->name }}">{{ $tt->name }}</option> 
+                                    @endforeach
+                                    <?php } ?>
+                                </select>
+                                <span class="input-group-btn">
+                                  <button class="btn btn-primary btn-sm btnAddValue" type="button" data-value="{{ $thuoctinh['id'] }}">
+                                    Tạo mới
+                                  </button>
+                                </span>
+                              </div>
+                              <?php }elseif($thuoctinh['type']==2){ ?>
+                                <label for="radio_{{ $thuoctinh['id'] }}_1"><input type="radio" name="thuoc_tinh[{{ $thuoctinh['id'] }}]" id="radio_{{ $thuoctinh['id'] }}_1" value="Có"  > Có</label>
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                <label for="radio_{{ $thuoctinh['id'] }}_2"><input type="radio" name="thuoc_tinh[{{ $thuoctinh['id'] }}]" id="radio_{{ $thuoctinh['id'] }}_2" value="Không"  > Không </label>
+                              <?php } ?>
+                            </td>
                           </tr>
                           @endforeach
                         @endif
@@ -133,6 +170,35 @@
   </section>
   <!-- /.content -->
 </div>
+<div id="tagModal" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+    <form method="POST" action="{{ route('tag.ajax-save-tt') }}" id="formAjaxTag">      
+      <div class="modal-body" id="contentTag">
+          <input type="hidden" name="type" value="2">
+           <!-- text input -->
+          <div class="col-md-12">
+            <div class="form-group">
+              <label>Nhiều giá trị cách nhau bằng dấu "<span style="color:red"> ; </span>" </label>
+              <textarea class="form-control" name="str_tag" id="str_tag" rows="4" >{{ old('str_tag') }}</textarea>
+            </div>
+            
+          </div>
+          <div classs="clearfix"></div>
+      </div>
+      <div style="clear:both"></div>
+      <div class="modal-footer" style="text-align:center">             
+        <input type="hidden" name="tt_id" value="0" id="tt_id">
+        <button type="button" class="btn btn-primary btn-sm" id="btnSaveTagAjax"> Save</button>
+        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" id="btnCloseModalTag">Close</button>
+      </div>
+      </form>
+    </div>
+
+  </div>
+</div>
 <style type="text/css">
   .nav-tabs>li.active>a{
     color:#FFF !important;
@@ -151,9 +217,39 @@ $(document).on('click', '.remove-image', function(){
     $(this).parents('.col-md-3').remove();
   }
 });
-
-
+  
+$(document).on('click', '#btnSaveTagAjax', function(){
+  var tt_id = $('#tt_id').val();
+  $.ajax({
+    url : $('#formAjaxTag').attr('action'),
+    data: $('#formAjaxTag').serialize(),
+    type : "post", 
+    success : function(str_id){    
+      $('#str_tag').val('');      
+      $('#btnCloseModalTag').click();
+      $.ajax({
+        url : "{{ route('tag.ajax-list-tt') }}",
+        data: { 
+          tt_id : $('#tt_id').val(),          
+          str_id : str_id
+        },
+        type : "get", 
+        success : function(data){
+            $('select[data-value='+ tt_id +']').html(data);
+        }
+      });
+    }
+  });
+});
     $(document).ready(function(){
+
+
+      $('.btnAddValue').click(function(){
+        $('#tt_id').val($(this).data('value'));
+          $('#tagModal').modal('show');
+      });   
+
+
       $('#btnSave').click(function(){
         var errReq = 0;
         $('#dataForm .req').each(function(){

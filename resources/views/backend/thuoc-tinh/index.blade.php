@@ -75,7 +75,7 @@
                   <img src="{{ URL::asset('public/admin/dist/img/move.png')}}" class="move img-thumbnail" alt="Cập nhật thứ tự"/>
                 </td>
                 <td>                  
-                  <a href="{{ route( 'thuoc-tinh.edit', [ 'id' => $item->id ]) }}">{{ $item->id }}-{{ $item->name }}</a>
+                  <a href="{{ route( 'thuoc-tinh.edit', [ 'id' => $item->id ]) }}">{{ $item->name }}</a>
                 </td>
                 
                 <td style="text-align:center">

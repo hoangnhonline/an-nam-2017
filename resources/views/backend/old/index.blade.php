@@ -133,9 +133,9 @@
                 <td style="text-align:right">{{ number_format($item->so_luong_ton) }}</td>
                 <td style="white-space:nowrap; text-align:right">
                   <a class="btn btn-default btn-sm" href="{{ route('product-detail', [$item->slug , $item->id] ) }}" target="_blank"><i class="fa fa-eye" aria-hidden="true"></i> Xem</a>                  
-                  <a href="{{ route( 'old.edit', [ 'id' => $item->id ]) }}" class="btn btn-warning btn-sm">Chỉnh sửa</a>                 
+                  <a href="{{ route( 'old.edit', [ 'id' => $item->id ]) }}" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i></a>                 
 
-                  <a onclick="return callDelete('{{ $item->name }}','{{ route( 'old.destroy', [ 'id' => $item->id ]) }}');" class="btn btn-danger btn-sm">Xóa</a>
+                  <a onclick="return callDelete('{{ $item->name }}','{{ route( 'old.destroy', [ 'id' => $item->id ]) }}');" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
 
                 </td>
               </tr> 

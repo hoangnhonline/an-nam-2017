@@ -206,7 +206,13 @@ Route::group(['namespace' => 'Backend', 'prefix' => 'backend', 'middleware' => '
         Route::get('/create', ['as' => 'tag.create', 'uses' => 'TagController@create']);
         Route::post('/store', ['as' => 'tag.store', 'uses' => 'TagController@store']);
         Route::post('/ajaxSave', ['as' => 'tag.ajax-save', 'uses' => 'TagController@ajaxSave']);  
+        Route::post('/ajaxSaveTT', ['as' => 'tag.ajax-save-tt', 'uses' => 'TagController@ajaxSaveTT']);
+        Route::post('/ajaxSaveDL', ['as' => 'tag.ajax-save-dl', 'uses' => 'TagController@ajaxSaveDL']);
+        Route::post('/ajaxSaveColor', ['as' => 'tag.ajax-save-color', 'uses' => 'TagController@ajaxSaveColor']);
         Route::get('/ajax-list', ['as' => 'tag.ajax-list', 'uses' => 'TagController@ajaxList']);      
+        Route::get('/ajax-list-tt', ['as' => 'tag.ajax-list-tt', 'uses' => 'TagController@ajaxListTT']); 
+        Route::get('/ajax-list-dl', ['as' => 'tag.ajax-list-dl', 'uses' => 'TagController@ajaxListDL']);    
+        Route::get('/ajax-list-color', ['as' => 'tag.ajax-list-color', 'uses' => 'TagController@ajaxListColor']);      
         Route::get('{id}/edit',   ['as' => 'tag.edit', 'uses' => 'TagController@edit']);
         Route::post('/update', ['as' => 'tag.update', 'uses' => 'TagController@update']);
         Route::get('{id}/destroy', ['as' => 'tag.destroy', 'uses' => 'TagController@destroy']);

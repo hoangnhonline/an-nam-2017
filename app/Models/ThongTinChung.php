@@ -29,7 +29,12 @@ class ThongTinChung extends Model  {
                             'detail', 
                             'price', 
                             'cate_id',
+                            'image_url',
                             'created_user', 
                             'updated_user'];
+    public function products()
+    {
+        return $this->hasMany('App\Models\Product', 'thong_tin_chung_id');
+    }
 
-}
+}   

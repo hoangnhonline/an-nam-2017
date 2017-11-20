@@ -86,8 +86,10 @@
                 
                 </td>               
                 <td style="white-space:nowrap; text-align:right">  
-                  <a href="{{ route( 'thong-tin-chung.edit', [ 'id' => $item->id ]) }}" class="btn btn-warning btn-sm">Chỉnh sửa</a>
-                  <a onclick="return callDelete('{{ $item->name }}','{{ route( 'thong-tin-chung.destroy', [ 'id' => $item->id ]) }}');" class="btn btn-danger btn-sm">Xóa</a>
+                  <a href="{{ route( 'thong-tin-chung.edit', [ 'id' => $item->id ]) }}" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i></a>
+                  @if($item->products->count() == 0)
+                  <a onclick="return callDelete('{{ $item->name }}','{{ route( 'thong-tin-chung.destroy', [ 'id' => $item->id ]) }}');" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                  @endif
                 </td>
               </tr> 
               @endforeach

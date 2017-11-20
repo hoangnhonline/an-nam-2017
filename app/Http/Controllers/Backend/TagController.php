@@ -9,6 +9,10 @@ use App\Http\Controllers\Controller;
 use App\Models\Tag;
 use App\Models\District;
 use App\Models\MetaData;
+use App\Models\Listtt;
+use App\Models\DungLuong;
+use App\Models\Color;
+
 use Helper, File, Session, Auth;
 
 class TagController extends Controller
@@ -50,6 +54,35 @@ class TagController extends Controller
         $tagArr = $query->orderBy('id', 'desc')->get();
        
         return view('backend.tag.ajax-list', compact( 'tagArr', 'type', 'tagSelected'));
+    }
+    public function ajaxListTT(Request $request){
+
+        $tt_id = $request->tt_id;
+        $str_id = $request->str_id;
+        $tmpArr = explode(",", $str_id);
+        $id_selected = $tmpArr[0];
+        $listtt = Listtt::where('tt_id', $tt_id)->orderBy('id', 'asc')->get();
+       
+        return view('backend.tag.ajax-list-tt', compact( 'listtt', 'id_selected'));
+    }
+    public function ajaxListDL(Request $request){
+
+        $loai_id = $request->loai_id;
+        $str_id = $request->str_id;
+        $tmpArr = explode(",", $str_id);
+        $id_selected = $tmpArr[0];
+        $dls = DungLuong::where('loai_id', $loai_id)->orderBy('id', 'asc')->get();
+       
+        return view('backend.tag.ajax-list-dl', compact( 'dls', 'id_selected'));
+    }
+    public function ajaxListColor(Request $request){
+        
+        $str_id = $request->str_id;
+        $tmpArr = explode(",", $str_id);
+        $id_selected = $tmpArr[0];
+        $colors = Color::orderBy('id', 'asc')->get();
+       
+        return view('backend.tag.ajax-list-color', compact( 'colors', 'id_selected'));
     }
     /**
     * Show the form for creating a new resource.
@@ -130,7 +163,88 @@ class TagController extends Controller
         return implode(',', $arrId);
 
     }
+    public function ajaxSaveTT(Request $request)
+    {
+        $dataArr = $request->all();
+        
+        $str_tag = $request->str_tag;
 
+        $tt_id = $request->tt_id;
+
+        $tmpArr = explode(';', $str_tag);
+
+        if( !empty($tmpArr) ){
+            foreach ($tmpArr as $tag) {
+                
+            $tag = trim($tag);
+            if( $tag != ""){
+                // check xem co chua
+                $arr = Listtt::where('name', '=', $tag)->where('tt_id', $tt_id)->first();
+                if( !empty( (array) $arr)) {
+                    $arrId[] = $arr->id;
+                }else{
+                    $rs = Listtt::create(['name'=> $tag, 'tt_id' => $tt_id]);
+                    $arrId[] = $rs->id;
+                }
+            }
+            }   
+        }
+        return implode(',', $arrId);
+    }
+    public function ajaxSaveDL(Request $request)
+    {
+        $dataArr = $request->all();
+        
+        $str_tag = $request->str_tag;
+
+        $loai_id = $request->loai_id;
+
+        $tmpArr = explode(';', $str_tag);
+
+        if( !empty($tmpArr) ){
+            foreach ($tmpArr as $tag) {
+                
+            $tag = trim($tag);
+            if( $tag != ""){
+                // check xem co chua
+                $arr = DungLuong::where('name', '=', $tag)->where('loai_id', $loai_id)->first();
+                if( !empty( (array) $arr)) {
+                    $arrId[] = $arr->id;
+                }else{
+                    $rs = DungLuong::create(['name'=> $tag, 'loai_id' => $loai_id]);
+                    $arrId[] = $rs->id;
+                }
+            }
+            }   
+        }
+        return implode(',', $arrId);
+    }
+    public function ajaxSaveColor(Request $request)
+    {
+        $dataArr = $request->all();
+        
+        $str_color = $request->str_color;       
+
+        $tmpArr = explode(';', $str_color);
+
+        if( !empty($tmpArr) ){
+            foreach ($tmpArr as $tag) {
+                
+            $tag = trim($tag);
+            if( $tag != ""){
+                // check xem co chua
+                $arr = Color::where('name', '=', $tag)->first();
+                if( !empty( (array) $arr)) {
+                    $arrId[] = $arr->id;
+                }else{
+                    $rs = Color::create(['name'=> $tag]);
+                    $arrId[] = $rs->id;
+                }
+            }
+            }   
+        }
+        return implode(',', $arrId);
+    }
     /**
     * Display the specified resource.
     *

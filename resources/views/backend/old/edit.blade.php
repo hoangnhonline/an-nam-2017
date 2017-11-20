@@ -96,7 +96,9 @@
                         <div class="form-group">
                           <label for="email">Thông tin sản phẩm<span class="red-star">*</span></label>
                           <?php 
-                          $loai_id = old('loai_id');
+                          $loai_id = $detail->loai_id;
+                          ?>
+                          <?php                          
                           if($loai_id > 0){
                             $thongTinChungList = DB::table('thong_tin_chung')->where('loai_id', $loai_id)->get();
                           }
@@ -108,14 +110,60 @@
                             @endforeach
                           </select>
                         </div>
+                        <div class="col-md-6 row">
+                            <div class="input-group">  
+                                <label>Dung lượng                                   
+                                </label>                              
+                                <select class="form-control" data-value="{{ $loai_id }}" name="dung_luong_id">
+                                  <option value="">---</option>
+                                  <?php 
+                                  
+                                  if($loai_id){
+                                  $dls = DB::table('dung_luong')->where('loai_id', $loai_id)->get();
+                                  if($dls){                                  
+                                  ?>
+                                  @foreach($dls as $dl)
+                                    <option value="{{ $dl->id }}" {{ $detail->dung_luong_id == $dl->id ? "selected": "" }}>{{ $dl->name }}</option> 
+                                    @endforeach
+                                    <?php } } ?>
+                                </select>
+                                <span class="input-group-btn">
+                                  <button style="margin-top: 24px" class="btn btn-primary btn-sm btnAddValue" type="button" data-value="{{ $loai_id }}">
+                                    Tạo mới
+                                  </button>
+                                </span>
+                              </div>   
+                        </div>
+                        <div class="col-md-6 ">
+                          <div class="input-group">  
+                                <label>Màu sắc                                  
+                                </label>                              
+                                <select class="form-control" id="color_id" name="color_id">
+                                  <option value="">---</option>
+                                  @if( $colorArr->count() > 0)
+                                    @foreach( $colorArr as $color )
+                                        <option value="{{ $color->id }}" {{ $color->id == $detail->color_id ? "selected" : "" }}>{{ $color->name }}</option>
+                                    @endforeach
+                                  @endif
+                                </select>
+                                <span class="input-group-btn">
+                                  <button style="margin-top: 24px" class="btn btn-primary btn-sm btnAddColor" type="button">
+                                    Tạo mới
+                                  </button>
+                                </span>
+                           </div>
+                        </div>
+                        <div class="clearfix"></div>
                         <div class="form-group" >                  
                           <label>Tên <span class="red-star">*</span></label>
                           <input type="text" class="form-control req" name="name" id="name" value="{{ old('name', $detail->name) }}">
                         </div>
-                        <div class="form-group">                  
-                          <label>Slug <span class="red-star">*</span></label>                  
-                          <input type="text" class="form-control req" readonly="readonly" name="slug" id="slug" value="{{ old('slug', $detail->slug) }}">
-                        </div>
+                        <div class="form-group" >                  
+                            <label>IMEI/Serial number<span class="red-star">*</span></label>
+                            <input type="text" class="form-control req" name="imei" id="imei" value="{{ old('imei', $detail->imei) }}">
+                        </div> 
+                          <input type="hidden" class="form-control req" readonly="readonly" name="slug" id="slug" value="{{ old('slug', $detail->slug) }}">
+                        
                         
                         <div class="col-md-12 none-padding">
                           <div class="checkbox">
@@ -126,22 +174,9 @@
                         <div class="form-group" >                  
                             <label>Giá<span class="red-star">*</span></label>
                             <input type="text" class="form-control req number" name="price" id="price" value="{{ old('price', $detail->price) }}">
-                        </div>                                               
-                         <div class="col-md-6 none-padding">
-                          <label>Số lượng tồn<span class="red-star">*</span></label>                  
-                          <input type="text" class="form-control req number" name="so_luong_ton" id="so_luong_ton" value="{{ old('so_luong_ton', $detail->so_luong_ton) }}">                        
-                        </div>
-                      <div class="col-md-6">
-                          <label>Màu sắc</label>
-                          <select name="color_id" id="color_id" class="form-control">
-                              <option value="">--chọn--</option>
-                              @if( $colorArr->count() > 0)
-                                @foreach( $colorArr as $color )
-                                    <option value="{{ $color->id }}" {{ old('color_id', $detail->color_id) == $color->id ? "selected" : "" }}>{{ $color->name }}</option>
-                                @endforeach
-                              @endif
-                          </select>
-                      </div>
+                        </div>                                                                        
+                        <input type="hidden" name="so_luong_ton" value="1"> 
+                      
                       <div style="margin-bottom:10px;clear:both"></div>
                       <div class="form-group">
                           <label>Mô tả</label>
@@ -240,6 +275,62 @@
   </section>
   <!-- /.content -->
 </div>
+<div id="tagModal" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+    <form method="POST" action="{{ route('tag.ajax-save-dl') }}" id="formAjaxTag">      
+      <div class="modal-body" id="contentTag">
+          <input type="hidden" name="type" value="2">
+           <!-- text input -->
+          <div class="col-md-12">
+            <div class="form-group">
+              <label>Nhiều giá trị cách nhau bằng dấu "<span style="color:red"> ; </span>" </label>
+              <textarea class="form-control" name="str_tag" id="str_tag" rows="4" >{{ old('str_tag') }}</textarea>
+            </div>
+            
+          </div>
+          <div classs="clearfix"></div>
+      </div>
+      <div style="clear:both"></div>
+      <div class="modal-footer" style="text-align:center">             
+        <input type="hidden" name="loai_id" value="0" id="loai_id_ajax">
+        <button type="button" class="btn btn-primary btn-sm" id="btnSaveTagAjax"> Save</button>
+        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" id="btnCloseModalTag">Close</button>
+      </div>
+      </form>
+    </div>
+
+  </div>
+</div>
+<div id="colorModal" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+    <form method="POST" action="{{ route('tag.ajax-save-color') }}" id="formAjaxColor">      
+      <div class="modal-body" id="contentColor">          
+           <!-- text input -->
+          <div class="col-md-12">
+            <div class="form-group">
+              <label>Nhiều giá trị cách nhau bằng dấu "<span style="color:red"> ; </span>" </label>
+              <textarea class="form-control" name="str_color" id="str_color" rows="4" >{{ old('str_color') }}</textarea>
+            </div>
+            
+          </div>
+          <div classs="clearfix"></div>
+      </div>
+      <div style="clear:both"></div>
+      <div class="modal-footer" style="text-align:center">
+        <button type="button" class="btn btn-primary btn-sm" id="btnSaveColorAjax"> Save</button>
+        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" id="btnCloseModalColor">Close</button>
+      </div>
+      </form>
+    </div>
+
+  </div>
+</div>
 <input type="hidden" id="route_upload_tmp_image_multiple" value="{{ route('image.tmp-upload-multiple') }}">
 <input type="hidden" id="route_upload_tmp_image" value="{{ route('image.tmp-upload') }}">
 <style type="text/css">
@@ -264,15 +355,68 @@ $(document).on('click', '.remove-image', function(){
     $(this).parents('.col-md-3').remove();
   }
 });
+$(document).on('change', '#thong_tin_chung_id', function(){
+  $('#name').val($("#thong_tin_chung_id :selected").text() + ' ');
 
+});
 $(document).on('keypress', '#name_search', function(e){
   if(e.which == 13) {
       e.preventDefault();
       filterAjax($('#search_type').val());
   }
 });
-
+$(document).on('click', '#btnSaveTagAjax', function(){
+  var loai_id = $('#loai_id').val();
+  $.ajax({
+    url : $('#formAjaxTag').attr('action'),
+    data: $('#formAjaxTag').serialize(),
+    type : "post", 
+    success : function(str_id){    
+      $('#str_tag').val('');      
+      $('#btnCloseModalTag').click();
+      $.ajax({
+        url : "{{ route('tag.ajax-list-dl') }}",
+        data: { 
+          loai_id : $('#loai_id').val(),          
+          str_id : str_id
+        },
+        type : "get", 
+        success : function(data){
+            $('select[data-value='+ loai_id +']').html(data);
+        }
+      });
+    }
+  });
+});
+$(document).on('click', '#btnSaveColorAjax', function(){  
+  $.ajax({
+    url : $('#formAjaxColor').attr('action'),
+    data: $('#formAjaxColor').serialize(),
+    type : "post", 
+    success : function(str_id){    
+      $('#str_color').val('');      
+      $('#btnCloseModalColor').click();
+      $.ajax({
+        url : "{{ route('tag.ajax-list-color') }}",
+        data: {           
+          str_id : str_id
+        },
+        type : "get", 
+        success : function(data){
+            $('#color_id').html(data);
+        }
+      });
+    }
+  });
+});
     $(document).ready(function(){
+        $('.btnAddValue').click(function(){
+        $('#loai_id_ajax').val($('#loai_id').val());
+          $('#tagModal').modal('show');
+      });   
+       $('.btnAddColor').click(function(){        
+          $('#colorModal').modal('show');
+      });   
       $('#cate_id').change(function(){         
         var obj = $(this);
             $.ajax({

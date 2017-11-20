@@ -74,7 +74,7 @@ class ThongTinChungController extends Controller
                     $thuocTinhArr[$value->id]['id'] = $value->id;
                     $thuocTinhArr[$value->id]['name'] = $value->name;
 
-                    $thuocTinhArr[$value->id]['child'] = ThuocTinh::where('loai_thuoc_tinh_id', $value->id)->select('id', 'name')->orderBy('display_order')->get()->toArray();
+                    $thuocTinhArr[$value->id]['child'] = ThuocTinh::where('loai_thuoc_tinh_id', $value->id)->select('id', 'name', 'type')->orderBy('display_order')->get()->toArray();
                 }
                 
             }
@@ -111,6 +111,30 @@ class ThongTinChungController extends Controller
 
         $dataArr['updated_user'] = Auth::user()->id; 
         $dataArr['price'] = str_replace(',', '', $request->price);
+
+        $image_url = $dataArr['image_url'];
+        if( $image_url ){
+            $origin_img = base_path().$image_url;
+            $img = Image::make($origin_img);
+            $w_img = $img->width();
+            $h_img = $img->height();
+
+            $tmpArrImg = explode('/', $origin_img);
+            
+            $new_img = config('annam.upload_thumbs_path').end($tmpArrImg);
+           
+            if($w_img > $h_img){
+
+                Image::make($origin_img)->resize(200, null, function ($constraint) {
+                        $constraint->aspectRatio();
+                })->crop(200, 200)->save($new_img);
+            }else{
+                Image::make($origin_img)->resize(null, 200, function ($constraint) {
+                        $constraint->aspectRatio();
+                })->crop(200, 200)->save($new_img);
+            }                           
+            
+        }
         if( !empty($dataArr['thuoc_tinh'])){
             foreach( $dataArr['thuoc_tinh'] as $k => $value){
                 if( $value == ""){
@@ -193,7 +217,7 @@ class ThongTinChungController extends Controller
                 $thuocTinhArr[$value->id]['id'] = $value->id;
                 $thuocTinhArr[$value->id]['name'] = $value->name;
 
-                $thuocTinhArr[$value->id]['child'] = ThuocTinh::where('loai_thuoc_tinh_id', $value->id)->select('id', 'name')->orderBy('display_order')->get()->toArray();
+                $thuocTinhArr[$value->id]['child'] = ThuocTinh::where('loai_thuoc_tinh_id', $value->id)->select('id', 'name', 'type')->orderBy('display_order')->get()->toArray();
             }            
         }        
 
@@ -222,7 +246,29 @@ class ThongTinChungController extends Controller
             'name.required' => 'Bạn chưa nhập tên',
             'price.required' => 'Bạn chưa nhập giá máy mới',
         ]); 
-        
+        $image_url = $dataArr['image_url'];
+        if( $image_url ){
+            $origin_img = base_path().$image_url;
+            $img = Image::make($origin_img);
+            $w_img = $img->width();
+            $h_img = $img->height();
+
+            $tmpArrImg = explode('/', $origin_img);
+            
+            $new_img = config('annam.upload_thumbs_path').end($tmpArrImg);
+           
+            if($w_img > $h_img){
+
+                Image::make($origin_img)->resize(200, null, function ($constraint) {
+                        $constraint->aspectRatio();
+                })->crop(200, 200)->save($new_img);
+            }else{
+                Image::make($origin_img)->resize(null, 200, function ($constraint) {
+                        $constraint->aspectRatio();
+                })->crop(200, 200)->save($new_img);
+            }                           
+            
+        }
         if( !empty($dataArr['thuoc_tinh'])){
             foreach( $dataArr['thuoc_tinh'] as $k => $value){
                 if( $value == ""){

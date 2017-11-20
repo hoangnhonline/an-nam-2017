@@ -55,6 +55,8 @@ class Product extends Model  {
                     'meta_id',
                     'price_sell',
                     'thong_tin_chung_id',
+                    'dung_luong_id',
+                    'imei',
                     'het_hang'
                     ];
     
