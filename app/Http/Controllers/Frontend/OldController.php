@@ -19,6 +19,7 @@ use App\Models\ArticlesCate;
 use App\Models\Newsletter;
 use App\Models\Settings;
 use App\Models\MetaData;
+use App\Models\ThongTinChung;
 
 use App\Models\CustomerNotification;
 use Helper, File, Session, Auth, Hash;
@@ -53,13 +54,14 @@ class OldController extends Controller
         
         $loai_id = $loaiDetail->id;
         
-        $query = Product::where('loai_id', $loai_id)
+        $query = Product::where('product.loai_id', $loai_id)
             ->where('so_luong_ton', '>', 0)
             ->where('het_hang', 0)
-            ->where('price', '>', 0)       
             ->where('is_old', 1);
+            
+
         if($cate_id > 0){
-            $query->where('cate_id', $cate_id);
+            $query->where('product.cate_id', $cate_id);
         }
         if($price_from){
             $query->where('price_sell','>=', $price_from);
@@ -67,9 +69,9 @@ class OldController extends Controller
         if($price_to){
             $query->where('price_sell','<=', $price_to);
         }
-            $query->leftJoin('product_img', 'product_img.id', '=','product.thumbnail_id')
-            ->leftJoin('sp_thuoctinh', 'sp_thuoctinh.product_id', '=','product.id')
-            ->select('product_img.image_url', 'product.*', 'thuoc_tinh');
+            $query
+            ->leftJoin('thong_tin_chung', 'thong_tin_chung.id', '=','product.thong_tin_chung_id')
+            ->select('product.*', 'thong_tin_chung.price as price_new', 'thong_tin_chung.image_url', \DB::raw('COUNT(product.id) as total'));            
             if($sort == 1){
                 $query->orderBy('price_sell', 'desc');
             }else{
@@ -77,7 +79,8 @@ class OldController extends Controller
             }
 
             $query->orderBy('product.id', 'desc');
-
+            $query->groupBy('product.thong_tin_chung_id');
+            $query->groupBy('product.dung_luong_id');
             $productList  = $query->paginate(36);
                      
 
@@ -92,7 +95,44 @@ class OldController extends Controller
         return view('frontend.old.cate', compact('productList', 'loaiDetail', 'hoverInfo', 'socialImage', 'seo', 'is_old', 'cate_id', 'price_from', 'price_to', 'sort'));
         
     }
+    public function listOld(Request $request){
+        $thong_tin_chung_id = $request->thongTinChungId ? $request->thongTinChungId : null;        
+        $dung_luong_id = $request->dungLuongId ? $request->dungLuongId : 0;
+        $color_id = $request->color_id ? $request->color_id : [];
+        if($thong_tin_chung_id){
+            $query = Product::where('thong_tin_chung_id', $thong_tin_chung_id)
+            ->where('so_luong_ton', '>', 0)
+            ->where('dung_luong_id', $dung_luong_id)
+            ->where('het_hang', 0);
 
+            if(!empty($color_id)){
+                $query->whereIn('color_id', $color_id);
+            }
+            $query->where('price', '>', 0)
+            ->where('is_old', 1)               
+            ->leftJoin('product_img', 'product_img.id', '=','product.thumbnail_id')            
+            ->select('product_img.image_url', 'product.*')              
+            ->orderBy('product.id', 'desc');
+
+            $productList  = $query->paginate(20);
+            $colorArr=[];
+            if($productList->count() > 0){
+                foreach($productList as $product){
+                    $colorArr[$product->color_id] = $product->color->name;
+                }
+            }
+             $is_old = 1;           
+             $thongTinDetail = ThongTinChung::find($thong_tin_chung_id);
+             $socialImage = $thongTinDetail->banner_menu;
+             $seo['title'] = $seo['description'] = $seo['keywords'] = $thongTinDetail->name . " cũ giá rẻ";
+             $cate_id = $thongTinDetail->cate_id;
+             $loaiDetail = LoaiSp::find($thongTinDetail->loai_id);
+             
+            return view('frontend.old.list-old', compact('productList', 'loaiDetail',  'thongTinDetail',  'socialImage', 'seo', 'is_old', 'cate_id', 'colorArr', 'color_id'));
+        }else{
+            return redirect()->route('home');
+        }
+    }
     public function oldDevice(Request $request)
     {   
         $productArr = $manhinhArr = [];

@@ -41,6 +41,7 @@ Route::group(['namespace' => 'Frontend'], function()
     Route::get('/chuong-trinh-khuyen-mai', ['as' => 'chuong-trinh-khuyen-mai', 'uses' => 'EventController@index']);
     Route::get('event/{slug}', ['as' => 'detail-event', 'uses' => 'EventController@detail']);
    Route::get('may-cu/{slug}', ['as' => 'old-cate', 'uses' => 'OldController@cate']);
+   Route::get('may-cu/{slug}/{slugMau}-{thongTinChungId}-{dungLuongId}', ['as' => 'old-list', 'uses' => 'OldController@listOld']);
 
     Route::post('/send-contact', ['as' => 'send-contact', 'uses' => 'ContactController@store']);
     Route::post('/set-service', ['as' => 'set-service', 'uses' => 'CartController@setService']);

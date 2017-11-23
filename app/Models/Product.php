@@ -73,4 +73,10 @@ class Product extends Model  {
     public function thongtinchung(){
         return $this->hasOne('App\Models\ThongTinChung',  'id', 'thong_tin_chung_id');
     }
+    public function dungluong(){
+        return $this->hasOne('App\Models\DungLuong',  'id', 'dung_luong_id');
+    }
+    public function color(){
+        return $this->hasOne('App\Models\Color',  'id', 'color_id');
+    }
 }

@@ -52,10 +52,16 @@
                             <div class="block_price">
                                 <strong>{!! $detail->is_sale == 1 ? number_format($detail->price_sale ) : number_format($detail->price)  !!}₫</strong>
                             </div>
+                            @if($detail->mo_ta)
+                            <div class="block_promotion">
+                                <strong>THÔNG TIN</strong>
+                                <div style="padding:5px;font-size: 13px">{!! $detail->mo_ta !!}</div>
+                            </div>
+                            @endif
                             @if($detail->khuyen_mai)
                             <div class="block_promotion">
                                 <strong>KHUYẾN MÃI</strong>
-                                {!! $detail->khuyen_mai !!}
+                                <div style="padding:5px;font-size: 13px">{!! $detail->khuyen_mai !!}</div>
                             </div>
                             @endif
                             <a href="javascript:;" title="Mua Ngay" class="block_order" data-id="{!! $detail->id !!}">

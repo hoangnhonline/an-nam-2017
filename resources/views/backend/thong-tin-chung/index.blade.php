@@ -68,7 +68,8 @@
             
           <table class="table table-bordered" id="table-list-data">
             <tr>
-              <th style="width: 1%">#</th>                            
+              <th style="width: 1%">#</th>            
+              <th width="150">Thumbnail</th>                
               <th style="text-align:left">Tên SP</th>
               <th width="1%;white-space:nowrap">Thao tác</th>
             </tr>
@@ -80,7 +81,10 @@
 
                 ?>
               <tr id="row-{{ $item->id }}">
-                <td><span class="order">{{ $i }}</span></td>               
+                <td><span class="order">{{ $i }}</span></td> 
+                 <td>
+                  <img class="img-thumbnail lazy" data-original="{{ Helper::showImage($item->image_url)}}" width="145">
+                </td>                
                 <td>                  
                   <a style="color:#333;font-weight:bold" href="{{ route( 'thong-tin-chung.edit', [ 'id' => $item->id ]) }}">{{ $item->name }}
                 

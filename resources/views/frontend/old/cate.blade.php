@@ -112,9 +112,12 @@
         @if($productList->count() > 0)
         <ul class="pro_de_old">
           @foreach( $productList as $product )
+          <?php 
+         // var_dump("<pre>", $product );die;
+          ?>
           <li class="col-sm-5ths col-xs-6 product_item">
             <div class="de_old_img">
-              <a href="{{ route('product-detail', [$product->slug, $product->id]) }}" title="{!! $product->name !!}">
+              <a href="{{ route('old-list', [$loaiDetail->slug, $product->slug, $product->thong_tin_chung_id, $product->dung_luong_id]) }}" title="{!! $product->name !!}">
                 <img alt="{!! $product->name !!}" src="{{ $product->image_url ? Helper::showImageThumb($product->image_url) : URL::asset('admin/dist/img/no-image.jpg') }}">
               </a>
               <figure class="product_detail_de">
@@ -142,11 +145,12 @@
                   @endforeach
                   
                 @endif   
-              </figure>
+              </figure>              
+              <span class="quantity"> {{ $product->total }} máy </span>
             </div>
             <div class="product_info">
               <h3 class="product_name">
-                <a href="{{ route('product-detail', [$product->slug, $product->id]) }}" title="">{!! $product->name !!}</a>
+                <a href="{{ route('old-list', [$loaiDetail->slug, $product->slug, $product->thong_tin_chung_id, $product->dung_luong_id]) }}" title="">{!! $product->thongtinchung->name !!} {{ ($product->dungluong) ? $product->dungluong->name : "" }}</a>
               </h3>
               <div class="product_price">
               <p class="price_title price_now">Giá : <span>{{ number_format($product->price) }}₫</span></p>
@@ -182,6 +186,18 @@
       .block_product h3.block_title.block_title_link{
         border-top: none;
       }
+      .quantity {
+        background: #c10017;
+        padding: 3px 5px;
+        font-size: 12px;
+        border-radius: 2px;
+        margin-left: 5px;
+        color: #FFF;
+        position: absolute;
+        z-index: 5;
+        bottom: 0;
+        left: 0;
+    }
   </style>
 @stop
 @section('js')

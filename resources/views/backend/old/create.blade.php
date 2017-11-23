@@ -91,7 +91,7 @@
                           </select>
                         </div>
                         <?php 
-                        $loai_id = $_GET['loai_id'];
+                        $loai_id = isset($_GET['loai_id']) ? $_GET['loai_id'] : null;
                         ?>
                         <div class="col-md-6 row">
                             <div class="input-group">  
@@ -145,7 +145,7 @@
                             <label>IMEI/Serial number<span class="red-star">*</span></label>
                             <input type="text" class="form-control req" name="imei" id="imei" value="{{ old('imei') }}">
                         </div>   
-                        <input type="hidden" class="form-control req" readonly="readonly" name="slug" id="slug" value="{{ old('slug') }}">                        
+                        <input type="hidden" class="form-control" readonly="readonly" name="slug" id="slug" value="{{ old('slug') }}">                        
 
                         <div class="col-md-12 none-padding">
                           <div class="checkbox">
@@ -319,7 +319,23 @@ $(document).on('click', '.remove-image', function(){
   }
 });
 $(document).on('change', '#thong_tin_chung_id', function(){
-  $('#name').val($("#thong_tin_chung_id :selected").text() + ' ');
+  var name = $("#thong_tin_chung_id :selected").text() + ' ';
+  $('#name').val(name);
+   if( name != ''){
+      $.ajax({
+        url: $('#route_get_slug').val(),
+        type: "POST",
+        async: false,      
+        data: {
+          str : name
+        },              
+        success: function (response) {
+          if( response.str ){                  
+            $('#slug').val( response.str );
+          }                
+        }
+      });
+   }
 
 });
 $(document).on('click', '#btnSaveTagAjax', function(){
