@@ -71,7 +71,7 @@ class OldController extends Controller
         }
             $query
             ->leftJoin('thong_tin_chung', 'thong_tin_chung.id', '=','product.thong_tin_chung_id')
-            ->select('product.*', 'thong_tin_chung.price as price_new', 'thong_tin_chung.image_url', \DB::raw('COUNT(product.id) as total'));            
+            ->select('product.*', 'thong_tin_chung.price as price_new', 'thong_tin_chung.image_url', \DB::raw('COUNT(product.id) as total'), \DB::raw('MIN(product.price_sell) as price'));            
             if($sort == 1){
                 $query->orderBy('price_sell', 'desc');
             }else{
@@ -104,10 +104,6 @@ class OldController extends Controller
             ->where('so_luong_ton', '>', 0)
             ->where('dung_luong_id', $dung_luong_id)
             ->where('het_hang', 0);
-
-            if(!empty($color_id)){
-                $query->whereIn('color_id', $color_id);
-            }
             $query->where('price', '>', 0)
             ->where('is_old', 1)               
             ->leftJoin('product_img', 'product_img.id', '=','product.thumbnail_id')            
@@ -121,6 +117,21 @@ class OldController extends Controller
                     $colorArr[$product->color_id] = $product->color->name;
                 }
             }
+            $query = Product::where('thong_tin_chung_id', $thong_tin_chung_id)
+            ->where('so_luong_ton', '>', 0)
+            ->where('dung_luong_id', $dung_luong_id)
+            ->where('het_hang', 0);
+
+            if(!empty($color_id)){
+                $query->whereIn('color_id', $color_id);
+            }
+            $query->where('price', '>', 0)
+            ->where('is_old', 1)               
+            ->leftJoin('product_img', 'product_img.id', '=','product.thumbnail_id')            
+            ->select('product_img.image_url', 'product.*')              
+            ->orderBy('product.id', 'desc');
+
+            $productList  = $query->paginate(20);
              $is_old = 1;           
              $thongTinDetail = ThongTinChung::find($thong_tin_chung_id);
              $socialImage = $thongTinDetail->banner_menu;

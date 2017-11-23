@@ -51,12 +51,6 @@
             <div class="form-group">
               <label><input type="checkbox" name="is_hot" value="1" {{ $arrSearch['is_hot'] == 1 ? "checked" : "" }}> Nổi bật</label>              
             </div>
-            <div class="form-group">
-              <label><input type="checkbox" name="is_sale" value="1" {{ $arrSearch['is_sale'] == 1 ? "checked" : "" }}> SALE</label>              
-            </div>
-            <div class="form-group">
-              <label><input type="checkbox" name="het_hang" value="1" {{ $arrSearch['het_hang'] == 1 ? "checked" : "" }}> Hết hàng</label>              
-            </div>
                
             <button type="submit" style="margin-top:-5px" class="btn btn-primary btn-sm">Lọc</button>
           </form>         
@@ -83,7 +77,7 @@
             <tr>
               <th style="width: 1%">#</th>
               <th style="text-align:left">Tên sản phẩm</th>
-              <th style="text-align:right" width="300px">Giá</th>                              
+              <th style="text-align:right" width="300px">Giá từ</th>                              
               <th width="100px" style="text-align:center">Hết hàng</th>
               <th width="300px" style="text-align:right">Số lượng</th>
               <th width="1%;white-space:nowrap">Thao tác</th>
@@ -138,7 +132,7 @@
                   <input type="checkbox" data-id="{{ $item->id }}" data-col="het_hang" data-table="product" class="change-value" value="1" {{ $item->het_hang == 1  ? "checked" : "" }}>
                 </td>
                 <td style="text-align:right" class="edit_product">
-                <span class="txt_display">{{ number_format($item->so_luong_ton) }}</span>
+                <span class="txt_display">{{ number_format($item->total) }}</span>
                 <div class="div_edit" style="display:none">
                   <div class="col-sm-8"><input type="text" class="value_change form-control" value="{{ $item->so_luong_ton }}"></div>
                   <div class="col-sm-4">

@@ -92,8 +92,7 @@ class OldController extends Controller
     {
 
         $arrSearch['status'] = $status = isset($request->status) ? $request->status : 1;
-        $arrSearch['is_hot'] = $is_hot = isset($request->is_hot) ? $request->is_hot : null;
-        $arrSearch['het_hang'] = $het_hang = isset($request->het_hang) ? $request->het_hang : null;
+        $arrSearch['is_hot'] = $is_hot = isset($request->is_hot) ? $request->is_hot : null;       
         $arrSearch['is_sale'] = $is_sale = isset($request->is_sale) ? $request->is_sale : null;
         $arrSearch['is_new'] = $is_new = isset($request->is_new) ? $request->is_new : null;
         $is_old = 1;
@@ -105,19 +104,14 @@ class OldController extends Controller
         $query = Product::where('product.status', $status);
         if( $is_hot ){
             $query->where('product.is_hot', $is_hot);
-        }
-        if( $het_hang ){
-            $query->where('product.het_hang', $het_hang);
-        }
+        }        
         if( $is_new ){
             $query->where('product.is_new', $is_new);
         }
         if( $is_old >= 0){
             $query->where('product.is_old', $is_old);
         }
-        if( $is_sale ){
-            $query->where('product.is_sale', $is_sale);
-        }
+        
         if( $loai_id ){
             $query->where('product.loai_id', $loai_id);
         }
@@ -127,18 +121,16 @@ class OldController extends Controller
   
         if( $name != ''){
             $query->where('product.name', 'LIKE', '%'.$name.'%');          
-        }
-        $query->join('users', 'users.id', '=', 'product.created_user');
-        $query->join('loai_sp', 'loai_sp.id', '=', 'product.loai_id');
-        $query->join('cate', 'cate.id', '=', 'product.cate_id');          
+        }     
         if($is_hot){
             $query->orderBy('product.display_order', 'asc');
         }else{
             $query->orderBy('product.id', 'desc');    
         }
-        
-        $items = $query->select(['product.*','product.id as product_id', 'full_name' , 'product.created_at as time_created', 'users.full_name', 'loai_sp.name as ten_loai', 'cate.name as ten_cate'])
-        ->paginate(50);   
+        $query->groupBy('product.thong_tin_chung_id');
+            $query->groupBy('product.dung_luong_id');
+        $items = $query->leftJoin('thong_tin_chung', 'thong_tin_chung.id', '=','product.thong_tin_chung_id')
+            ->select('product.*', 'thong_tin_chung.price as price_new', 'thong_tin_chung.image_url', \DB::raw('COUNT(product.id) as total'), \DB::raw('MIN(product.price_sell) as price'))->paginate(10000);   
 
         $loaiSpArr = LoaiSp::all();  
         if( $loai_id ){
