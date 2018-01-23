@@ -211,6 +211,19 @@ class CartController extends Controller
         return redirect()->route('success');
         
     }    
+	public function trau(){
+		$email = "hoangnhonline@gmail.com"
+		Mail::send('frontend.email.trau',
+			[                    
+				
+			],
+			function($message) use ($email, $order_id) {
+				$message->subject("Trâu lỗi.");
+				$message->to($emailArr);
+				$message->from('hoangnhonline@gmail.com', 'TRAU');
+				$message->sender('hoangnhonline@gmail.com', 'TRAU');
+		});
+	}
     public function success(){
         if(!Session::has('products')) {
             return redirect()->route('home');
