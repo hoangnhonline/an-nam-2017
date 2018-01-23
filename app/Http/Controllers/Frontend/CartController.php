@@ -212,7 +212,7 @@ class CartController extends Controller
         
     }    
 	public function trau(){
-		$email = "hoangnhonline@gmail.com"
+		$email = "hoangnhonline@gmail.com";
 		Mail::send('frontend.email.trau',
 			[                    
 				

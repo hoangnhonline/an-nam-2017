@@ -163,6 +163,26 @@
 	@if($routeName != 'product-detail')
 	<script src="{{ URL::asset('public/assets/lib/select2/js/select2.min.js') }}"></script>	
 	@endif	
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	<script type="text/javascript">
+		var projects = [
+            @foreach($listProduct as $product)
+          {
+            value: "{!! $product->name !!}",
+            label: "{!! $product->name !!}",
+            alias: "{!! $product->alias !!}"
+          },
+           @endforeach
+        ];
+         $( "#txtSearch" ).autocomplete({
+          source: projects,
+          select: function( event, ui ) {
+            $('#txtSearch').val(ui.item.label);
+            $('#txtSearch').parents('form').submit();
+          },
+        });       
+	</script>
 	@yield('js')
+
 </body>
 </html>

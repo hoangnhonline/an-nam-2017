@@ -6,6 +6,8 @@ use App\Models\LoaiSp;
 use App\Models\Cate;
 use App\Models\Settings;
 use App\Models\Color;
+use App\Models\Product;
+
 use Request;
 //use App\Models\Entity\SuperStar\Account\Traits\Behavior\SS_Shortcut_Icon;
 
@@ -59,12 +61,14 @@ class ViewComposerServiceProvider extends ServiceProvider
 	       // var_dump("<pre>", $menuDoc);die;   
 	        //var_dump("<pre>", $loaiSpKey);die;
 	        $colorList = Color::orderBy('display_order')->get();
+	        $listProduct = Product::where('product.status', 1) ->where('het_hang', 0)->where('so_luong_ton', '>', 0)->orderBy('id', 'desc')->select('slug', 'name', 'id', 'alias')->get(); 
 			$view->with( [
 					'loaiSpList' => $loaiSpList, 
 					'settingArr' => $settingArr,
 					'cateArrByLoai' => $cateArrByLoai,
 					'routeName' => $routeName,
-					'colorList' => $colorList
+					'colorList' => $colorList,
+					'listProduct' => $listProduct
 					] );
 		});
 	}
