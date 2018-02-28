@@ -154,6 +154,7 @@ Route::group(['namespace' => 'Backend', 'prefix' => 'backend', 'middleware' => '
     });
     Route::group(['prefix' => 'old'], function () {
         Route::get('/', ['as' => 'old.index', 'uses' => 'OldController@index']);
+        Route::get('/chi-tiet', ['as' => 'old.danh-sach', 'uses' => 'OldController@ds']);
         Route::get('/kho', ['as' => 'old.kho', 'uses' => 'OldController@kho']);
         Route::get('/create/', ['as' => 'old.create', 'uses' => 'OldController@create']);
         Route::post('/store', ['as' => 'old.store', 'uses' => 'OldController@store']);

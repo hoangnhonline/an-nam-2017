@@ -37,20 +37,7 @@
 									</div><!-- /table-cell product-col -->
 									<div class="table-cell price-col t-r">{!! number_format($price) !!}</div><!-- /table-cell price-col t-r -->
 									<div class="table-cell numb-col t-c">
-										<select data-id="{{$product->id}}" class="change_quantity_payment form-control">
-											<?php 
-										$soluongton = DB::table('product')->where('id', $product->id)->first()->so_luong_ton;
-										?>
-											@for($i = 1; $i <= $soluongton; $i++ )
-				                            <option value="{{$i}}"
-				                            @if ($i == $getlistProduct[$product->id])
-				                              selected
-				                            @endif
-				                            > {{$i}}
-				                              @if($i == 50) + @endif
-				                            </option>
-				                            @endfor
-										</select> 
+										1
 									</div><!-- /table-cell numb-col t-c -->
 									<?php 
 									$total += $total_per_product = ($getlistProduct[$product->id]*$price);

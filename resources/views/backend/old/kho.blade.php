@@ -77,8 +77,7 @@
             <tr>
               <th style="width: 1%">#</th>
               <th style="text-align:left">Tên sản phẩm</th>
-              <th style="text-align:right" width="300px">Giá từ</th>                              
-              <th width="100px" style="text-align:center">Hết hàng</th>
+              <th style="text-align:right" width="300px">Giá từ</th>                                            
               <th width="300px" style="text-align:right">Số lượng</th>
               <th width="1%;white-space:nowrap">Thao tác</th>
             </tr>
@@ -92,7 +91,7 @@
               <tr id="row-{{ $item->id }}">
                 <td><span class="order">{{ $i }}</span></td>
                 <td>                  
-                  <a style="color:#333;font-weight:bold" href="{{ route( 'old.edit', [ 'id' => $item->id ]) }}">{{ $item->name }} {{ $item->name_extend }}</a>
+                  <a style="color:#333;font-weight:bold" href="{{ route( 'old.danh-sach', [ 'thong_tin_chung_id' => $item->thong_tin_chung_id, 'dung_luong_id' => $item->dung_luong_id ]) }}">{!! $item->thongtinchung->name !!} {{ ($item->dungluong) ? $item->dungluong->name : "" }}</a>
                  <p style="margin-top:10px">
                     
                   </p>                  
@@ -128,9 +127,7 @@
                       </div>
                     </div>
                   </td>
-                <td style="text-align:center">
-                  <input type="checkbox" data-id="{{ $item->id }}" data-col="het_hang" data-table="product" class="change-value" value="1" {{ $item->het_hang == 1  ? "checked" : "" }}>
-                </td>
+               
                 <td style="text-align:right" class="edit_product">
                 <span class="txt_display">{{ number_format($item->total) }}</span>
                 <div class="div_edit" style="display:none">
@@ -146,7 +143,7 @@
                 </div>
                 </td>
                 <td style="white-space:nowrap; text-align:right">
-                  <a href="{{ route( 'old.edit', [ 'id' => $item->id ]) }}" class="btn btn-warning btn-sm">Chỉnh sửa</a>                 
+                  <a href="{{ route( 'old.danh-sach', [ 'thong_tin_chung_id' => $item->thong_tin_chung_id, 'dung_luong_id' => $item->dung_luong_id ]) }}" class="btn btn-info btn-sm">Danh sách</a>                 
                 </td>
               </tr> 
               @endforeach

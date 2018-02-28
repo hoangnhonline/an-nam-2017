@@ -16,6 +16,7 @@ use App\Models\SpThuocTinh;
 use App\Models\ProductImg;
 use App\Models\MetaData;
 use App\Models\ThongTinChung;
+use App\Models\DungLuong;
 
 use Helper, File, Session, Auth, URL, Image;
 
@@ -87,6 +88,80 @@ class OldController extends Controller
         }
 
         return view('backend.old.index', compact( 'items', 'arrSearch', 'loaiSpArr', 'cateArr'));
+    }
+    public function ds(Request $request)
+    {
+
+        $arrSearch['status'] = $status = isset($request->status) ? $request->status : 1;
+        $arrSearch['is_hot'] = $is_hot = isset($request->is_hot) ? $request->is_hot : null;
+        $arrSearch['thong_tin_chung_id'] = $thong_tin_chung_id = isset($request->thong_tin_chung_id) ? $request->thong_tin_chung_id : 0;
+        $arrSearch['dung_luong_id'] = $dung_luong_id = isset($request->dung_luong_id) ? $request->dung_luong_id : 0;
+        $arrSearch['is_sale'] = $is_sale = isset($request->is_sale) ? $request->is_sale : null;
+        $arrSearch['is_new'] = $is_new = isset($request->is_new) ? $request->is_new : null;
+        $arrSearch['het_hang'] = $het_hang = isset($request->het_hang) ? $request->het_hang : null;
+        $is_old = 1;
+        $arrSearch['loai_id'] = $loai_id = isset($request->loai_id) ? $request->loai_id : null;
+        $arrSearch['cate_id'] = $cate_id = isset($request->cate_id) ? $request->cate_id : null;
+       
+        $arrSearch['name'] = $name = isset($request->name) && trim($request->name) != '' ? trim($request->name) : '';
+        $thongTinDetail = ThongTinChung::find($thong_tin_chung_id);
+        $query = Product::where('product.status', $status);
+        if( $is_hot ){
+            $query->where('product.is_hot', $is_hot);
+        }
+        if( $thong_tin_chung_id > 0){
+            $query->where('product.thong_tin_chung_id', $thong_tin_chung_id);
+
+        }
+        if( $dung_luong_id  > 0){
+            $query->where('product.dung_luong_id', $dung_luong_id);
+            $dungLuongDetail = DungLuong::find($dung_luong_id);
+        }else{
+            $dungLuongDetail = (object)[];
+        }
+        if( $het_hang ){
+            $query->where('product.het_hang', $het_hang);
+        }
+        if( $is_new ){
+            $query->where('product.is_new', $is_new);
+        }
+        if( $is_old >= 0){
+            $query->where('product.is_old', $is_old);
+        }
+        if( $is_sale ){
+            $query->where('product.is_sale', $is_sale);
+        }
+        if( $loai_id ){
+            $query->where('product.loai_id', $loai_id);
+        }
+        if( $cate_id ){
+            $query->where('product.cate_id', $cate_id);
+        }        
+  
+        if( $name != ''){
+            $query->where('product.name', 'LIKE', '%'.$name.'%');          
+        }
+        $query->join('users', 'users.id', '=', 'product.created_user');
+        $query->join('loai_sp', 'loai_sp.id', '=', 'product.loai_id');
+        $query->join('cate', 'cate.id', '=', 'product.cate_id');
+        $query->leftJoin('product_img', 'product_img.id', '=','product.thumbnail_id');        
+        if($is_hot){
+            $query->orderBy('product.display_order', 'asc');
+        }else{
+            $query->orderBy('product.id', 'desc');    
+        }
+        
+        $items = $query->select(['product_img.image_url','product.*','product.id as product_id', 'full_name' , 'product.created_at as time_created', 'users.full_name', 'loai_sp.name as ten_loai', 'cate.name as ten_cate'])
+        ->paginate(50);   
+
+        $loaiSpArr = LoaiSp::all();  
+        if( $loai_id ){
+            $cateArr = Cate::where('loai_id', $loai_id)->orderBy('display_order')->get();
+        }else{
+            $cateArr = (object) [];
+        }
+
+        return view('backend.old.ds', compact( 'items', 'arrSearch', 'loaiSpArr', 'cateArr', 'thongTinDetail','dungLuongDetail', 'dung_luong_id'));
     }
     public function kho(Request $request)
     {
