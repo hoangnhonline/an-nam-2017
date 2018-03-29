@@ -180,7 +180,12 @@
             $('#txtSearch').val(ui.item.label);
             $('#txtSearch').parents('form').submit();
           },
-        });       
+        });    
+        $(document).on('keypress', '#txtSearch', function(e) {
+	    if(e.which == 13) {
+	        $('#txtSearch').parents('form').submit();
+	    		}
+			});   
 	</script>
 	@yield('js')
 
